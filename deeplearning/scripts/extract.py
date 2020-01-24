@@ -4,7 +4,7 @@ import zipfile
 
 
 def extractor(zip_file):
-    extensions = ('.tif')
+    extensions = '.tif'
     [zip_file.extract(file, r"../downloaded/tif") for file in zip_file.namelist() if file.endswith(extensions)]
 
 
