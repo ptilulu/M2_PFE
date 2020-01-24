@@ -1,6 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 from keras.preprocessing.image import ImageDataGenerator
+from argparse import ArgumentParser
 
 import os
 import matplotlib.pyplot as plt
@@ -13,6 +14,19 @@ BATCH_SIZE = 128
 EPOCHS = 15
 IMG_HEIGHT = 600
 IMG_WIDTH = 600
+
+# GET ARGS
+parser = ArgumentParser()
+parser.add_argument("-e", "--epochs", dest="EPOCHS", help="Specify the number of epochs", type=int)
+parser.add_argument("-b", "--batch", dest="BATCH_SIZE", help="Specify the batch size", type=int)
+args = parser.parse_args()
+if args.EPOCHS:
+    EPOCHS = args.EPOCHS
+if args.BATCH_SIZE:
+    BATCH_SIZE = args.BATCH_SIZE
+
+print("EPOCHS = %d" % EPOCHS)
+print("BATCH_SIZE = %d" % BATCH_SIZE)
 
 # PART 1: LOAD DATA
 train_image_generator = ImageDataGenerator(
@@ -78,7 +92,7 @@ history = model.fit_generator(
 
 # Retrieve results from training
 acc = history.history['accuracy']
-val_acc = history.history['val_acc']
+val_acc = history.history['val_accuracy']
 
 loss = history.history['loss']
 val_loss = history.history['val_loss']

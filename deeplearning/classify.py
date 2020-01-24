@@ -1,9 +1,9 @@
 from keras.models import load_model
 from keras.preprocessing import image
+from argparse import ArgumentParser
 
 import os
 import numpy as np
-import sys
 
 
 # FUNCTIONS
@@ -17,13 +17,16 @@ def test_images(model, path):
         print(result)
 
 
-model_path = sys.argv[1]
-if not os.path.exists(model_path):
+# GET ARGS
+parser = ArgumentParser()
+parser.add_argument("model", dest="model_path", help="Model file to load", metavar="FILE")
+args = parser.parse_args()
+if not os.path.exists(args.model_path):
     print("Erreur: veuillez spécifier un nom de modèle à charger valide!")
     exit(1)
 
 # On charge notre modèle existant
-model = load_model(model_path)
+model = load_model(args.model_path)
 
 # On le recompile
 model.compile(
