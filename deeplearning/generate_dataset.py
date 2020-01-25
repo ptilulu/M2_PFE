@@ -49,3 +49,29 @@ validation = np.reshape(validation, [validation.shape[0], validation.shape[1] * 
 # save numpy array as .npy formats
 np.save('datasets/validation', validation)  # saves test.npy
 np.save('datasets/validation_labels', validation_labels)
+
+# Importing required libraries
+# import os
+# import numpy as np
+# from PIL import Image
+#
+# IMAGE_SIZE = 600
+# IMAGE_CHANNELS = 3
+# IMAGE_DIR = "data/gan"
+#
+# # Defining image dir path. Change this if you have different directory
+# images_path = IMAGE_DIR
+#
+# training_data = []
+#
+# for file in os.listdir(images_path):
+#     if file.endswith((".tif", ".jpg")):
+#         path = os.path.join(images_path, file)
+#         image = Image.open(path).resize((IMAGE_SIZE, IMAGE_SIZE), Image.ANTIALIAS)
+#         training_data.append(np.asarray(image))
+#
+# training_data = np.reshape(training_data, (-1, IMAGE_SIZE, IMAGE_SIZE, IMAGE_CHANNELS))
+# training_data = training_data / 127.5 - 1
+#
+# print('Saving...')
+# np.save('datasets/dcgan.npy', training_data)
