@@ -272,7 +272,7 @@ if __name__ == '__main__':
     parser.add_argument('--image_size', help='Size of images as tuple (height,width). Height and width must both be divisible by (2^5)', default="(600, 600)")
     parser.add_argument('--epochs', help='Number of epochs to train for', default=500000)
     parser.add_argument('--save_interval', help='How many epochs to go between saves/outputs', default=100)
-    parser.add_argument('--output_directory', help="Directoy to save weights and images to.", default="data/output/")
+    parser.add_argument('--output_directory', help="Directory to save weights and images to.", default="data/output/")
 
     args = parser.parse_args()
 
