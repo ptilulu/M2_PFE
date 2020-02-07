@@ -98,6 +98,8 @@ loss = history.history['loss']
 val_loss = history.history['val_loss']
 
 epochs_range = range(EPOCHS)
+if not os.path.exists("models/"):
+    os.makedirs("models/")
 filename = "models/MODEL_E" + str(EPOCHS) + "_B" + str(BATCH_SIZE)
 
 plt.figure(figsize=(8, 8))

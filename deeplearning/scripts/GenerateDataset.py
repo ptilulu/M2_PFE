@@ -29,4 +29,4 @@ def create_training_data():
 create_training_data()
 
 training_data = np.array(training_data).reshape(-1, IMG_SIZE, IMG_SIZE, 1)
-np.save('datasets/dcgan.npy', training_data)
+np.save('../datasets/dcgan.npy', training_data)

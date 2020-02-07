@@ -1,5 +1,6 @@
 from keras.models import Sequential, Model, load_model
-from keras.layers import UpSampling2D, Conv2D, Activation, BatchNormalization, Reshape, Dense, Input, LeakyReLU, Dropout, Flatten, ZeroPadding2D
+from keras.layers import UpSampling2D, Conv2D, Activation, BatchNormalization, Reshape, Dense, Input, LeakyReLU, \
+    Dropout, Flatten, ZeroPadding2D
 from keras.optimizers import Adam
 
 import glob
@@ -34,7 +35,8 @@ class DCGAN:
         # We also need a 3rd dimension which is chosen relatively arbitrarily, in this case it's 64.
         model = Sequential()
         model.add(
-            Dense(self.starting_filters * (self.img_size[0] // (2 ** self.upsample_layers))  *  (self.img_size[1] // (2 ** self.upsample_layers)),
+            Dense(self.starting_filters * (self.img_size[0] // (2 ** self.upsample_layers)) * (
+                        self.img_size[1] // (2 ** self.upsample_layers)),
                   activation="relu", input_shape=noise_shape))
         model.add(Reshape(((self.img_size[0] // (2 ** self.upsample_layers)),
                            (self.img_size[1] // (2 ** self.upsample_layers)),
@@ -86,7 +88,8 @@ class DCGAN:
 
         model = Sequential()
 
-        model.add(Conv2D(32, kernel_size=self.kernel_size, strides=2, input_shape=img_shape, padding="same"))  # 192x256 -> 96x128
+        model.add(Conv2D(32, kernel_size=self.kernel_size, strides=2, input_shape=img_shape,
+                         padding="same"))  # 192x256 -> 96x128
         model.add(LeakyReLU(alpha=0.2))
         model.add(Dropout(0.25))
 
@@ -168,12 +171,11 @@ class DCGAN:
 
         for epoch in range(epochs):
 
+            print("HELLO 1")
 
             # Train Generator
             noise = np.random.normal(0, 1, (batch_size, 100))
             g_loss = self.combined.train_on_batch(noise, np.ones((batch_size, 1)))
-
-
 
             # Train Discriminator
             idx = np.random.randint(0, X_train.shape[0], half_batch)
@@ -193,14 +195,14 @@ class DCGAN:
 
             # If at save interval => save generated image samples, save model files
             if epoch % (save_interval) == 0:
-
                 self.save_imgs(epoch)
 
-                save_path = self.output_directory + "/models"
-                if not os.path.exists(save_path):
-                    os.makedirs(save_path)
-                self.discriminator.save(save_path + "/discrim.h5")
-                self.generator.save(save_path + "/generat.h5")
+                # save_path = self.output_directory + "/models"
+                # if not os.path.exists(save_path):
+                #    os.makedirs(save_path)
+                # self.discriminator.save(save_path + "/discrim.h5")
+                # self.generator.save(save_path + "/generat.h5")
+                print("HELLO2")
 
     def gene_imgs(self, count):
         # Generate images from the currently loaded model
@@ -212,7 +214,7 @@ class DCGAN:
 
         # Generates r*c images from the model, saves them individually and as a gallery
 
-        imgs = self.gene_imgs(r*c)
+        imgs = self.gene_imgs(r * c)
         imgs = 0.5 * imgs + 0.5
 
         for i, img_array in enumerate(imgs):
@@ -226,8 +228,8 @@ class DCGAN:
         assert nindex == nrows * c
         # want result.shape = (height*nrows, width*ncols, intensity)
         gallery = (imgs.reshape(nrows, c, height, width, intensity)
-                  .swapaxes(1, 2)
-                  .reshape(height * nrows, width * c, intensity))
+                   .swapaxes(1, 2)
+                   .reshape(height * nrows, width * c, intensity))
 
         path = f"{self.output_directory}/gallery_generated_{self.img_size[0]}x{self.img_size[1]}"
         if not os.path.exists(path):
@@ -243,7 +245,7 @@ class DCGAN:
         imgs = []
         for i in range(count):
             score = [0]
-            while not(threshold[0] < score[0] < threshold[1]):
+            while not (threshold[0] < score[0] < threshold[1]):
                 img = self.gene_imgs(1)
                 score = self.discriminator.predict(img)
             print("Image found: ", score[0])
@@ -263,21 +265,32 @@ class DCGAN:
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--load_generator', help='Path to existing generator weights file', default="../data/models/generat.h5")
-    parser.add_argument('--load_discriminator', help='Path to existing discriminator weights file', default="../data/models/discrim.h5")
-    parser.add_argument('--data', help='Path to directory of images of correct dimensions, using *.[filetype] (e.g. *.png) to reference images', default="data/gan/*.jpg")
-    parser.add_argument('--sample', help='If given, will generate that many samples from existing model instead of training', default=-1)
-    parser.add_argument('--sample_thresholds', help='The values between which a generated image must score from the discriminator', default="(0.0, 0.1)")
+    parser.add_argument('--load_generator', help='Path to existing generator weights file',
+                        default="../data/models/generat.h5")
+    parser.add_argument('--load_discriminator', help='Path to existing discriminator weights file',
+                        default="../data/models/discrim.h5")
+    parser.add_argument('--data',
+                        help='Path to directory of images of correct dimensions, using *.[filetype] (e.g. *.png) to reference images',
+                        default="data/gan/*.jpg")
+    parser.add_argument('--sample',
+                        help='If given, will generate that many samples from existing model instead of training',
+                        default=-1)
+    parser.add_argument('--sample_thresholds',
+                        help='The values between which a generated image must score from the discriminator',
+                        default="(0.0, 0.1)")
     parser.add_argument('--batch_size', help='Number of images to train on at once', default=24)
-    parser.add_argument('--image_size', help='Size of images as tuple (height,width). Height and width must both be divisible by (2^5)', default="(600, 600)")
+    parser.add_argument('--image_size',
+                        help='Size of images as tuple (height,width). Height and width must both be divisible by (2^5)',
+                        default="(600, 600)")
     parser.add_argument('--epochs', help='Number of epochs to train for', default=500000)
     parser.add_argument('--save_interval', help='How many epochs to go between saves/outputs', default=100)
-    parser.add_argument('--output_directory', help="Directory to save weights and images to.", default="data/output/")
+    parser.add_argument('--output_directory', help="Directory to save weights and images to.", default="data/generated")
 
     args = parser.parse_args()
 
     dcgan = DCGAN(args.load_discriminator, args.load_generator, args.output_directory, literal_eval(args.image_size))
     if args.sample == -1:
-        dcgan.train(epochs=int(args.epochs), image_path=args.data, batch_size=int(args.batch_size), save_interval=int(args.save_interval))
+        dcgan.train(epochs=int(args.epochs), image_path=args.data, batch_size=int(args.batch_size),
+                    save_interval=int(args.save_interval))
     else:
         dcgan.generate_imgs(int(args.sample), literal_eval(args.sample_thresholds), "")
