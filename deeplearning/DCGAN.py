@@ -171,8 +171,6 @@ class DCGAN:
 
         for epoch in range(epochs):
 
-            print("HELLO 1")
-
             # Train Generator
             noise = np.random.normal(0, 1, (batch_size, 100))
             g_loss = self.combined.train_on_batch(noise, np.ones((batch_size, 1)))
@@ -196,13 +194,11 @@ class DCGAN:
             # If at save interval => save generated image samples, save model files
             if epoch % (save_interval) == 0:
                 self.save_imgs(epoch)
-
-                # save_path = self.output_directory + "/models"
-                # if not os.path.exists(save_path):
-                #    os.makedirs(save_path)
-                # self.discriminator.save(save_path + "/discrim.h5")
-                # self.generator.save(save_path + "/generat.h5")
-                print("HELLO2")
+                save_path = self.output_directory + "/models"
+                if not os.path.exists(save_path):
+                   os.makedirs(save_path)
+                self.discriminator.save(save_path + "/discriminator.h5")
+                self.generator.save(save_path + "/generator.h5")
 
     def gene_imgs(self, count):
         # Generate images from the currently loaded model
@@ -266,12 +262,12 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--load_generator', help='Path to existing generator weights file',
-                        default="../data/models/generat.h5")
+                        default="models/generator.h5")
     parser.add_argument('--load_discriminator', help='Path to existing discriminator weights file',
-                        default="../data/models/discrim.h5")
+                        default="models/discriminator.h5")
     parser.add_argument('--data',
                         help='Path to directory of images of correct dimensions, using *.[filetype] (e.g. *.png) to reference images',
-                        default="data/gan/*.jpg")
+                        default="data/gan/*.tif")
     parser.add_argument('--sample',
                         help='If given, will generate that many samples from existing model instead of training',
                         default=-1)
@@ -285,7 +281,6 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', help='Number of epochs to train for', default=500000)
     parser.add_argument('--save_interval', help='How many epochs to go between saves/outputs', default=100)
     parser.add_argument('--output_directory', help="Directory to save weights and images to.", default="data/generated")
-
     args = parser.parse_args()
 
     dcgan = DCGAN(args.load_discriminator, args.load_generator, args.output_directory, literal_eval(args.image_size))

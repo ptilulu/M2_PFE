@@ -6,9 +6,6 @@ from argparse import ArgumentParser
 import os
 import matplotlib.pyplot as plt
 
-# Evite les messages de dépassement mémoire
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
 # VARS
 BATCH_SIZE = 128
 EPOCHS = 15
@@ -67,7 +64,7 @@ model = Sequential([
     Conv2D(64, 3, padding='same', activation='relu'),
     MaxPooling2D(),
     Flatten(),
-    Dense(512, activation='relu'),
+    Dense(32, activation='relu'),
     Dense(1, activation='sigmoid')
 ])
 
