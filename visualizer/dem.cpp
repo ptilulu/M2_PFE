@@ -2,10 +2,37 @@
 
 DEM::DEM(QString fileName)
 {
+
+    // Initialize GDAL
     GDALAllRegister();
-    poDataset = (GDALDataset *) GDALOpen(fileName.toStdString().c_str(), GA_ReadOnly );
-    if(poDataset == NULL) qDebug() << "Can't open file!" << fileName;
-    else qDebug() << "Loaded! Size is" << poDataset->GetRasterXSize() << "x" << poDataset->GetRasterYSize() << "x" << poDataset->GetRasterCount();
+
+    // Open the file
+    GDALDataset *dataset = (GDALDataset *) GDALOpen(fileName.toStdString().c_str(), GA_ReadOnly );
+    if(dataset == NULL) qDebug() << "Can't open file!" << fileName;
+    else qDebug() << "Loaded! Size is" << dataset->GetRasterXSize() << "x" << dataset->GetRasterYSize() << "x" << dataset->GetRasterCount();
+
+    // Get image metadata
+    this->width = dataset->GetRasterXSize();
+    this->height = dataset->GetRasterYSize();
+
+
+    // Get the raster band (DEM has one raster band representing elevation)
+    GDALRasterBand  *elevationBand = dataset->GetRasterBand(1);
+
+    // Create an array of width*height 32-bit floats (~400MB memory)
+    std::vector<float> data(width * height, 0.0f);
+    elevation_map = data;
+
+    // Read the entire file into the array (you can change the options to read only a portion
+    // of the file, or even scale it down if you want)
+
+    qDebug() << "Loading array...";
+    elevationBand->RasterIO(GF_Read, 0, 0, this->width, this->height, &this->elevation_map[0], this->width, this->height, GDT_Float32, 0, 0);
+    qDebug() << "done";
+
+    // Close the file
+    GDALClose(dataset);
+
     this->initializeColorMap();
 }
 
@@ -28,31 +55,12 @@ void DEM::initializeColorMap()
     color_map.push_back(std::make_pair(7500, QColor(230, 200, 230)));
 }
 
-int DEM::getElevationAt(int x, int y)
+float DEM::getElevationAt(int x, int y)
 {
-    GDALRasterBand  *poBand;
-    int             nBlockXSize, nBlockYSize;
-    int             bGotMin, bGotMax;
-    double          adfMinMax[2];
-    poBand = poDataset->GetRasterBand(1);
-    poBand->GetBlockSize( &nBlockXSize, &nBlockYSize );
-
-    adfMinMax[0] = poBand->GetMinimum( &bGotMin );
-    adfMinMax[1] = poBand->GetMaximum( &bGotMax );
-    if(!(bGotMin && bGotMax)) GDALComputeRasterMinMax((GDALRasterBandH)poBand, TRUE, adfMinMax);
-
-    float *pafScanline;
-    int   nXSize = poBand->GetXSize();
-
-    pafScanline = (float *) CPLMalloc(sizeof(float)*nXSize);
-    CPLErr err = poBand->RasterIO( GF_Read, x, y, 1, 1,
-                      pafScanline, nXSize, 1, GDT_Float32,
-                      0, 0 );
-
-    return pafScanline[0];
+    return elevation_map[x + y * this->width];
 }
 
-QColor DEM::getColorFromElevation(int elevation)
+QColor DEM::getColorFromElevation(float elevation)
 {
     for(unsigned int i = 0; i < color_map.size(); i++){
         if(elevation > color_map[i].first) continue;
@@ -61,12 +69,36 @@ QColor DEM::getColorFromElevation(int elevation)
     return color_map[color_map.size()-1].second;
 }
 
-int DEM::getWidth()
+unsigned int DEM::getWidth()
 {
-    return poDataset->GetRasterXSize();
+    return this->width;
 }
 
-int DEM::getHeight()
+unsigned int DEM::getHeight()
 {
-    return poDataset->GetRasterYSize();
+    return this->height;
+}
+
+float DEM::getMaxElevation()
+{
+    int maxElevation = -INT_MAX;
+    for(unsigned int i = 0; i < this->width; i++){
+        for(unsigned int j = 0; j < this->height; j++){
+            float currentElevation = this->getElevationAt(i, j);
+            if(maxElevation < currentElevation) maxElevation = currentElevation;
+        }
+    }
+    return maxElevation;
+}
+
+float DEM::getMinElevation()
+{
+    int minElevation = INT_MAX;
+    for(unsigned int i = 0; i < this->getWidth(); i++){
+        for(unsigned int j = 0; j < this->getHeight(); j++){
+            float currentElevation = this->getElevationAt(i, j);
+            if(minElevation > currentElevation) minElevation = currentElevation;
+        }
+    }
+    return minElevation;
 }

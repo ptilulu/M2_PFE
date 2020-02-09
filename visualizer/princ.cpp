@@ -1,6 +1,7 @@
 #include "princ.h"
 #include <QDebug>
 #include <QFileDialog>
+#include <QProgressBar>
 
 Princ::Princ(QWidget *parent) : QMainWindow(parent)
 {
@@ -14,10 +15,15 @@ void Princ::on_actionOuvrir_triggered()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Ouvrir l'image de terrain..."), "C://", tr("GeoTIFF Files (*.tif)"));
     if(fileName.isEmpty()) return;
     dem = new DEM(fileName);
+    this->glarea->setDem(dem);
+
     QFileInfo fileInfo(fileName);
     Ui_Princ::statusBar->showMessage("Fichier " + fileInfo.baseName() + " ouvert avec succès!");
+
     qDebug() << dem->getColorFromElevation(dem->getElevationAt(0, 0));
     qDebug() << dem->getColorFromElevation(dem->getElevationAt(5999, 5999));
+    qDebug() << dem->getMinElevation() << dem->getMaxElevation();
+    qDebug() << "FINI";
 }
 
 void Princ::on_actionQuirer_triggered()

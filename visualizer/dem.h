@@ -5,19 +5,25 @@
 #include "gdal/gdal_priv.h"
 #include <QDebug>
 #include <QColor>
+#include <QProgressBar>
 
 class DEM
 {
 public:
     DEM(QString fileName);
     void initializeColorMap();
-    int getElevationAt(int x, int y);
-    QColor getColorFromElevation(int elevation);
-    int getWidth();
-    int getHeight();
+
+    float getElevationAt(int x, int y);
+    QColor getColorFromElevation(float elevation);
+    unsigned int getWidth();
+    unsigned int getHeight();
+    float getMaxElevation();
+    float getMinElevation();
 private:
-    GDALDataset *poDataset;
     std::vector<std::pair<int, QColor>> color_map;
+    std::vector<float> elevation_map;
+    unsigned width;
+    unsigned height;
 };
 
 #endif // DEM_H

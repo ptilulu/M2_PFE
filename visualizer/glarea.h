@@ -14,6 +14,9 @@
 #include <QOpenGLTexture>
 #include <QVector3D>
 
+#include <algorithm>
+#include "dem.h"
+
 class GLArea : public QOpenGLWidget,
                protected QOpenGLFunctions
 {
@@ -22,6 +25,9 @@ class GLArea : public QOpenGLWidget,
 public:
     explicit GLArea(QWidget *parent = nullptr);
     ~GLArea() override;
+
+    DEM *getDem() const;
+    void setDem(DEM *value);
 
 protected slots:
     void onTimeout();
@@ -43,6 +49,8 @@ private:
     float dt = 0;
     float windowRatio = 1.0f;
     QPoint lastPos;
+
+    DEM* dem = nullptr;
 
     /*
     QOpenGLShaderProgram *program_skybox;

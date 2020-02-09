@@ -63,21 +63,26 @@ void GLArea::initializeGL()
 
 void GLArea::makeGLObjects()
 {
-    /*
+    // Pour être sûr de ne pas couper le terrain
+//    float skyboxBoundaries = std::max(std::max(int(dem->getWidth()), int(dem->getHeight())), int(dem->getMaxElevation()));
+/*
     float skyboxVertices[] = {
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, 1.0f, -1.0f,
+        -skyboxBoundaries, skyboxBoundaries, -skyboxBoundaries,
+        -skyboxBoundaries, -skyboxBoundaries, -skyboxBoundaries,
+        skyboxBoundaries, -skyboxBoundaries, -skyboxBoundaries,
+        skyboxBoundaries, -skyboxBoundaries, -skyboxBoundaries,
+        skyboxBoundaries, skyboxBoundaries, -skyboxBoundaries,
 
-        -1.0f, -1.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f
+        -skyboxBoundaries, -skyboxBoundaries, skyboxBoundaries,
+        -skyboxBoundaries, -skyboxBoundaries, -skyboxBoundaries,
+        -skyboxBoundaries, skyboxBoundaries, -skyboxBoundaries,
+        -skyboxBoundaries, skyboxBoundaries, skyboxBoundaries,
+        -skyboxBoundaries, -skyboxBoundaries, skyboxBoundaries,
+
+
     };
-
+*/
+/*
     QVector<GLfloat> vertData_skybox;
     for (int i = 0; i < 6; ++i) {
         // coordonnées sommets
@@ -211,6 +216,16 @@ void GLArea::mouseMoveEvent(QMouseEvent *ev)
     }
 
     lastPos = ev->pos();
+}
+
+DEM *GLArea::getDem() const
+{
+    return dem;
+}
+
+void GLArea::setDem(DEM *value)
+{
+    dem = value;
 }
 
 
