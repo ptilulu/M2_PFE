@@ -6,12 +6,17 @@
 #include <QDebug>
 #include <QColor>
 #include <QProgressBar>
+#include <QFileInfo>
 
 class DEM
 {
 public:
     DEM(QString fileName);
     void initializeColorMap();
+
+    void fromGeotif(QString fileName);
+    void fromAscii();
+    void fromJpeg(QString fileName);
 
     float getElevationAt(int x, int y);
     QColor getColorFromElevation(float elevation);
@@ -22,8 +27,8 @@ public:
 private:
     std::vector<std::pair<int, QColor>> color_map;
     std::vector<float> elevation_map;
-    unsigned width;
-    unsigned height;
+    unsigned width = 0;
+    unsigned height = 0;
 };
 
 #endif // DEM_H
