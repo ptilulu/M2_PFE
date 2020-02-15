@@ -6,16 +6,15 @@ import os
 import numpy as np
 
 
-# FUNCTIONS
 def test_images(model, path):
     for file in os.listdir(path):
         if file.endswith(('.jpg', '.png', '.tif')):
             img = image.load_img(os.path.join(path, file))
             img = image.img_to_array(img)
             img = np.expand_dims(img, axis=0)
-            result = model.predict_classes(img)
-            print("[" + ("Other", "Terrain")[result[0][0] == 1] + "] " + file + " (" + str(result[0][0]) + ")")
-
+            result = model.predict_classes(img, batch_size=10)
+            print("---------------- Fichier: " + file + " ----------------")
+            print(result[0][0])
 
 # GET ARGS
 parser = ArgumentParser()
@@ -40,4 +39,4 @@ print("--------------------- TERRAINS ---------------------")
 test_images(model, 'data/test/terrains/')
 
 print("--------------------- NOT A TERRAIN ---------------------")
-test_images(model, 'data/test/others/')
+test_images(model, 'data/test/not_terrains/')

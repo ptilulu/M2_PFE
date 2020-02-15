@@ -8,6 +8,11 @@ TARGET = visualizer
 TEMPLATE = app
 
 LIBS += -lgdal
+win32{
+    LIBS += -lGLU32\
+            -lOpengl32\
+            -lGdal32
+}
 
 SOURCES += main.cpp\
         princ.cpp \

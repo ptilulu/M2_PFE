@@ -5,8 +5,8 @@ from osgeo import gdal
 def split(path):
     raw_file_name = os.path.splitext(os.path.basename(path))[0].replace("_downsample", "")
 
-    tile_size_x = 60
-    tile_size_y = 60
+    tile_size_x = 600
+    tile_size_y = 600
 
     ds = gdal.Open(path)
     band = ds.GetRasterBand(1)

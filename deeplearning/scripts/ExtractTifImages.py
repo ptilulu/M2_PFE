@@ -12,7 +12,7 @@ def extractTifFiles():
     if not os.path.exists("../downloaded/tif"):
         os.makedirs("../downloaded/tif")
     pattern = '*.zip'
-    for root, dirs, files in os.walk('../downloaded'):
+    for root, dirs, files in os.walk('../downloaded/zip'):
         for filename in fnmatch.filter(files, pattern):
             if os.path.isfile(os.path.join('../downloaded/tif/', os.path.splitext(filename)[0] + '.tif')):
                 print(os.path.splitext(filename)[0] + '.tif trouvé')
