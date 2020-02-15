@@ -2,7 +2,7 @@
 #define DEM_H
 
 #include <QString>
-#include "gdal/gdal_priv.h"
+//#include "gdal/gdal_priv.h"
 #include <QDebug>
 #include <QColor>
 #include <QProgressBar>
@@ -24,9 +24,9 @@ public:
     unsigned int getHeight();
     float getMaxElevation();
     float getMinElevation();
+    std::vector<float> elevation_map;
 private:
     std::vector<std::pair<int, QColor>> color_map;
-    std::vector<float> elevation_map;
     unsigned width = 0;
     unsigned height = 0;
 };

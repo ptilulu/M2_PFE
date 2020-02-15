@@ -16,6 +16,7 @@
 
 #include <algorithm>
 #include "dem.h"
+#include "mytruc.h"
 
 class GLArea : public QOpenGLWidget,
                protected QOpenGLFunctions
@@ -51,6 +52,7 @@ private:
     QPoint lastPos;
 
     DEM* dem = nullptr;
+    mytruc truc;
 
     /*
     QOpenGLShaderProgram *program_skybox;

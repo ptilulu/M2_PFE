@@ -47,7 +47,7 @@ void GLArea::initializeGL()
     glEnable(GL_DEPTH_TEST);
 
     makeGLObjects();
-
+    truc.initializeGL();
     /*
     program_skybox = new QOpenGLShaderProgram(this);
     program_skybox->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/skybox.vsh");
@@ -63,6 +63,7 @@ void GLArea::initializeGL()
 
 void GLArea::makeGLObjects()
 {
+    truc.makeGLObject();
     // Pour être sûr de ne pas couper le terrain
 //    float skyboxBoundaries = std::max(std::max(int(dem->getWidth()), int(dem->getHeight())), int(dem->getMaxElevation()));
 /*
@@ -132,6 +133,7 @@ void GLArea::paintGL()
     viewMatrix.rotate(yRot, 0, 1, 0);
     viewMatrix.rotate(zRot, 0, 0, 1);
 
+    truc.display(projectionMatrix,viewMatrix);
     /*
     vbo_skybox.bind();
     program_skybox->bind();
@@ -226,6 +228,8 @@ DEM *GLArea::getDem() const
 void GLArea::setDem(DEM *value)
 {
     dem = value;
+    truc.setAltitudes(dem->elevation_map,600,600);
+    makeGLObjects();
 }
 
 
