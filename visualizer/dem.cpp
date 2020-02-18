@@ -29,7 +29,7 @@ void DEM::initializeColorMap()
 }
 
 void DEM::fromGeotif(QString fileName)
-{/*
+{
     // Initialize GDAL
     GDALAllRegister();
 
@@ -59,7 +59,7 @@ void DEM::fromGeotif(QString fileName)
 
     // Close the file
     GDALClose(dataset);
-*/}
+}
 void DEM::fromJpeg(QString fileName)
 {
     QImage image(fileName);
