@@ -41,7 +41,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFichier">
@@ -49,6 +49,8 @@
      <string>Fichier</string>
     </property>
     <addaction name="actionOuvrir"/>
+    <addaction name="separator"/>
+    <addaction name="exportOBJAction"/>
     <addaction name="separator"/>
     <addaction name="actionQuirer"/>
    </widget>
@@ -62,6 +64,11 @@
   <action name="actionQuirer">
    <property name="text">
     <string>Quitter</string>
+   </property>
+  </action>
+  <action name="exportOBJAction">
+   <property name="text">
+    <string>Exporter l'objet...</string>
    </property>
   </action>
  </widget>

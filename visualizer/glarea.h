@@ -38,13 +38,17 @@ protected:
     void doProjection();
     void resizeGL(int w, int h) override;
     void paintGL() override;
-    void keyPressEvent(QKeyEvent *ev) override;
-    void mousePressEvent(QMouseEvent *ev) override;
-    void mouseMoveEvent(QMouseEvent *ev) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
+
 
 private:
-    float xRot = 20.0f, yRot = 0.0f, zRot = 0.0f;
-    float xPos = 0.0f,  yPos=0.0f, zPos=-50.0f;
+    float xRot=90.0f, yRot=0.0f, zRot=0.0f;
+    float xPos=0.0f,  yPos=-6.0f, zPos=-980.0f;
+    float bgr=0.2f, bgg=0.4f, bgb=1.0f, bga=1.0f;   //background rgba
+    float deltaAngle=1, deltaZoom=1;                //delta for mouvement
     QTimer *timer = nullptr;
     QElapsedTimer elapsedTimer;
     float dt = 0;

@@ -43,11 +43,11 @@ GLArea::~GLArea()
 void GLArea::initializeGL()
 {
     initializeOpenGLFunctions();
-    glClearColor(0.5f,0.5f,1.0f,1.0f);
+    glClearColor(bgr,bgg,bgb,bga);
     glEnable(GL_DEPTH_TEST);
 
-    makeGLObjects();
     truc.initializeGL();
+    makeGLObjects();
     /*
     program_skybox = new QOpenGLShaderProgram(this);
     program_skybox->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/skybox.vsh");
@@ -103,23 +103,9 @@ void GLArea::makeGLObjects()
     */
 }
 
-
-void GLArea::tearGLObjects()
-{
-    //vbo_skybox.destroy();
-    //delete texture_skybox;
-}
-
-
-void GLArea::resizeGL(int w, int h)
-{
-    glViewport(0, 0, w, h);
-    windowRatio = float(w) / h;
-}
-
-
 void GLArea::paintGL()
 {
+    glClearColor(bgr,bgg,bgb,bga);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Matrice de projection
@@ -160,35 +146,72 @@ void GLArea::paintGL()
 }
 
 
+void GLArea::tearGLObjects()
+{
+    //vbo_skybox.destroy();
+    //delete texture_skybox;
+}
+
+void GLArea::resizeGL(int w, int h)
+{
+    glViewport(0, 0, w, h);
+    windowRatio = float(w) / h;
+}
+
 void GLArea::keyPressEvent(QKeyEvent *ev)
 {
-    float da = 0.1f;
 
     switch(ev->key()) {
-    case Qt::Key_A :
-        xRot -= da;
+        case Qt::Key_A :
+            xRot -= deltaAngle/9;
         break;
 
-    case Qt::Key_Q :
-        xRot += da;
+        case Qt::Key_Q :
+            xRot += deltaAngle/9;
         break;
 
-    case Qt::Key_Z :
-        yRot -= da;
+        case Qt::Key_Z :
+            yRot -= deltaAngle/9;
         break;
 
-    case Qt::Key_S :
-        yRot += da;
+        case Qt::Key_S :
+            yRot += deltaAngle/9;
         break;
 
-    case Qt::Key_E :
-        zRot -= da;
+        case Qt::Key_E :
+            zRot -= deltaAngle/9;
         break;
 
-    case Qt::Key_D :
-        zRot += da;
+        case Qt::Key_D :
+            zRot += deltaAngle/9;
         break;
-        }
+
+        case Qt::Key_Plus :
+            deltaAngle*=2;
+            deltaZoom*=2;
+            qDebug() << "deltaMouvment = " << deltaAngle;
+        break;
+
+        case Qt::Key_Minus :
+            deltaAngle/=2;
+            deltaZoom/=2;
+            qDebug() << "deltaMouvment = " << deltaAngle;
+        break;
+
+        case Qt::Key_Return :
+            xRot=90.0f, yRot=0.0f, zRot=0.0f;
+            xPos=0.0f,  yPos=-6.0f, zPos=-980.0f;
+        break;
+
+        case Qt::Key_Escape:
+            qDebug() <<"m_x" << xPos
+                     <<"m_y" << yPos
+                     <<"m_z" << zPos
+                     <<"a_x" << xRot
+                     <<"a_y" << yRot
+                     <<"a_z" << zRot;
+        break;
+    }
     update();
 }
 
@@ -198,22 +221,27 @@ void GLArea::mousePressEvent(QMouseEvent *ev)
     lastPos = ev->pos();
 }
 
+void GLArea::wheelEvent(QWheelEvent *ev){
+    zPos += static_cast<float>(ev->delta() * deltaZoom/100);
+    update();
+}
+
 void GLArea::mouseMoveEvent(QMouseEvent *ev)
 {
     int dx = ev->x() - lastPos.x();
     int dy = ev->y() - lastPos.y();
 
-    if (ev->buttons() & Qt::LeftButton) {
+    if (ev->buttons() & Qt::MidButton || (ev->buttons() & Qt::LeftButton && ev->buttons() & Qt::RightButton)) {
+        xPos += dx/10.0f;
+        zPos += dy;
+        update();
+    } else if (ev->buttons() & Qt::LeftButton) {
         xRot += dy;
         yRot += dx;
         update();
     } else if (ev->buttons() & Qt::RightButton) {
         xPos += dx/10.0f;
         yPos -= dy/10.0f;
-        update();
-    } else if (ev->buttons() & Qt::MidButton) {
-        xPos += dx/10.0f;
-        zPos += dy;
         update();
     }
 
@@ -228,7 +256,7 @@ DEM *GLArea::getDem() const
 void GLArea::setDem(DEM *value)
 {
     dem = value;
-    truc.setAltitudes(dem->elevation_map,600,600);
+    truc.setAltitudes(dem->elevation_map,dem->getWidth(),dem->getHeight());
     makeGLObjects();
 }
 
