@@ -1,3 +1,5 @@
+#version 130
+
 attribute vec4 in_position;
 varying vec3 col;
 

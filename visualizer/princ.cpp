@@ -29,7 +29,10 @@ void Princ::on_actionQuitter_triggered()
 
 void Princ::on_exportOBJAction_triggered()
 {
-
+    if(this->dem == nullptr) {
+        QMessageBox::warning(this, tr("Erreur"), QString("Vous devez d'abord charger une image!"));
+        return;
+    }
     Ui_Princ::statusBar->showMessage("Exportation en OBJ...");
     QString fileName = QFileDialog::getSaveFileName(this, tr("Exportation en OBJ..."), "C://", tr("OBJ Files (*.obj)"));
     if(fileName.isEmpty()) {
