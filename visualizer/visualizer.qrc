@@ -1,11 +1,16 @@
 <RCC>
-    <qresource prefix="shaders">
+    <qresource prefix="/shaders">
         <file alias="skybox.fsh">shaders/skybox.fsh</file>
         <file alias="skybox.vsh">shaders/skybox.vsh</file>
         <file alias="simple.fsh">shaders/simple.fsh</file>
         <file alias="simple.vsh">shaders/simple.vsh</file>
     </qresource>
-    <qresource prefix="textures">
+    <qresource prefix="/textures">
         <file alias="skybox.png">textures/skybox.png</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file alias="obj.png">icons/obj.png</file>
+        <file alias="open.png">icons/open.png</file>
+        <file alias="quit.png">icons/quit.png</file>
     </qresource>
 </RCC>

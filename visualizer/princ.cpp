@@ -8,6 +8,9 @@ Princ::Princ(QWidget *parent) : QMainWindow(parent)
 {
     setupUi(this);
     this->setWindowTitle("Génération de terrains par DeepLearning");
+    Ui_Princ::actionOuvrir->setIcon(QIcon(":/icons/open.png"));
+    Ui_Princ::actionQuitter->setIcon(QIcon(":/icons/quit.png"));
+    Ui_Princ::exportOBJAction->setIcon(QIcon(":/icons/obj.png"));
 }
 
 void Princ::on_actionOuvrir_triggered()
