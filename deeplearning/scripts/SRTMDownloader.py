@@ -1,8 +1,8 @@
 import requests
 import os
 
-for i in range(41, 72):
-    for j in range(1, 24):
+for i in range(1, 73):
+    for j in range(1, 25):
         if os.path.isfile("../downloaded/srtm_{}_{}.zip".format(str(i).zfill(2), str(j).zfill(2))):
             print("[Found] srtm_{}_{}.zip".format(str(i).zfill(2), str(j).zfill(2)))
         else:
