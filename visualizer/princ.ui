@@ -50,7 +50,9 @@
     </property>
     <addaction name="actionOuvrir"/>
     <addaction name="separator"/>
-    <addaction name="actionQuirer"/>
+    <addaction name="exportOBJAction"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuitter"/>
    </widget>
    <addaction name="menuFichier"/>
   </widget>
@@ -59,9 +61,14 @@
     <string>Ouvrir...</string>
    </property>
   </action>
-  <action name="actionQuirer">
+  <action name="actionQuitter">
    <property name="text">
     <string>Quitter</string>
+   </property>
+  </action>
+  <action name="exportOBJAction">
+   <property name="text">
+    <string>Exporter l'objet...</string>
    </property>
   </action>
  </widget>

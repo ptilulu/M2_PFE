@@ -17,7 +17,8 @@ private:
     DEM* dem = nullptr;
 private slots:
     void on_actionOuvrir_triggered();
-    void on_actionQuirer_triggered();
+    void on_actionQuitter_triggered();
+    void on_exportOBJAction_triggered();
 };
 
 #endif // PRINC_H

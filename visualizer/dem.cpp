@@ -59,6 +59,15 @@ void DEM::fromGeotif(QString fileName)
 
     // Close the file
     GDALClose(dataset);
+
+    for(unsigned int i = 0; i < this->width; i++){
+        for(unsigned int j = 0; j < this->height; j++){
+            elevation_map[i + j * this->width] /= 10;
+            if(elevation_map[i + j * this->width] < 0)
+                elevation_map[i + j * this->width] = -.1;
+        }
+    }
+
 }
 void DEM::fromJpeg(QString fileName)
 {

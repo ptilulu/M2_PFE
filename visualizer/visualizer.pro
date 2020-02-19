@@ -7,16 +7,25 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = visualizer
 TEMPLATE = app
 
-LIBS += -lgdal
+!win32{
+    LIBS += -lgdal
+    LIBS += -lglut -lGLU -lGL
+}
+win32{
+    LIBS += -lGLU32\
+            -lOpengl32
+}
 
-SOURCES += main.cpp\
-        princ.cpp \
-        glarea.cpp \
-    dem.cpp
+SOURCES +=  main.cpp\
+            princ.cpp\
+            glarea.cpp\
+            mytruc.cpp\
+            dem.cpp
 
-HEADERS  += princ.h \
-        glarea.h \
-    dem.h
+HEADERS  += princ.h\
+            glarea.h\
+            mytruc.h\
+            dem.h
 
 FORMS    += princ.ui
 

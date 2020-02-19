@@ -6,9 +6,12 @@ from argparse import ArgumentParser
 import os
 import matplotlib.pyplot as plt
 
+# Evite les messages de dépassement mémoire
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 # VARS
-BATCH_SIZE = 128
-EPOCHS = 15
+BATCH_SIZE = 64
+EPOCHS = 70
 IMG_HEIGHT = 600
 IMG_WIDTH = 600
 
