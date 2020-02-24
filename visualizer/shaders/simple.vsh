@@ -1,28 +1,19 @@
 #version 130
 
-attribute vec4 in_position;
-varying vec3 col;
+attribute vec4 posAttr;
+attribute vec3 norAttr;
+varying float height;
+varying vec3 nor;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
+uniform highp mat3 norMatrix;
 uniform float size;
 
 void main() {
-    vec4 pos = vec4(vec3(in_position) * size, 1.0);
+    vec4 pos = vec4(vec3(posAttr) * size, 1.0);
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * pos;
-    if(in_position.y > 191){
-        col=vec3(255/255.0f, 255/255.0f, 255/255.0f);
-    }else if(in_position.y > 127){
-        col=vec3(153/255.0f, 100/255.0f,  43/255.0f);
-    }else if(in_position.y > 63){
-        col=vec3(244/255.0f, 189/255.0f,  69/255.0f);
-    }else if(in_position.y > 31){
-        col=vec3(244/255.0f, 240/255.0f, 113/255.0f);
-    }else if(in_position.y > 1){
-        col=vec3( 51/255.0f, 204/255.0f,   0/255.0f);
-    }else {
-        col=vec3(  0/255.0f,  40/255.0f, 255/255.0f);
-    }
-
+    height=posAttr.y;
+    nor = norMatrix * norAttr;
 }

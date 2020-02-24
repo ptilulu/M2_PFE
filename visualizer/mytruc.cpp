@@ -32,12 +32,19 @@ void mytruc::initializeGL(){
 void mytruc::makeGLObject(){
     float altitude5,x=-(width/2.0f) + 1,z=-(height/2.0f) + 1;
     QVector3D color1(1,0,0),color2(0,1,0),color3(0,0,1),color4(0.2f,0,1),color5(0,0,0);
+    QVector3D pt1,pt2,pt3,pt4,pt5;
+    QVector3D nr1,nr2;
     QVector<GLfloat> vertData;
     for(uint l=0;l<height-1;l++){
         for(uint w=0;w<width-1;w++){
             switch (type) {
             case 1:
+                pt1=QVector3D(x-0.5f,altitudes[(l+0)*width+(w+0)],z-0.5f);
+                pt2=QVector3D(x+0.5f,altitudes[(l+0)*width+(w+1)],z-0.5f);
+                pt3=QVector3D(x-0.5f,altitudes[(l+1)*width+(w+0)],z+0.5f);
+                pt4=QVector3D(x+0.5f,altitudes[(l+1)*width+(w+1)],z+0.5f);
                 altitude5=(altitudes[l*width+w]+altitudes[l*width+(w+1)]+altitudes[(l+1)*width+w]+altitudes[(l+1)*width+(w+1)])/4;
+                pt5=QVector3D(x,altitude5,z);
 
                 vertData.append(x-0.5f);vertData.append(altitudes[(l+0)*width+(w+0)]);vertData.append(z-0.5f);
                 vertData.append(x+0.5f);vertData.append(altitudes[(l+0)*width+(w+1)]);vertData.append(z-0.5f);
@@ -65,14 +72,27 @@ void mytruc::makeGLObject(){
                 vertData.append(x-0.5f);vertData.append(altitudes[(l+1)*width+(w+0)]);vertData.append(z+0.5f);
             break;
             case 2:
-                vertData.append(x-0.5f);vertData.append(altitudes[(l+0)*width+(w+0)]);vertData.append(z-0.5f);
-                vertData.append(x+0.5f);vertData.append(altitudes[(l+0)*width+(w+1)]);vertData.append(z-0.5f);
-                vertData.append(x-0.5f);vertData.append(altitudes[(l+1)*width+(w+0)]);vertData.append(z+0.5f);
+                pt1=QVector3D(x-0.5f,altitudes[(l+0)*width+(w+0)],z-0.5f);
+                pt2=QVector3D(x+0.5f,altitudes[(l+0)*width+(w+1)],z-0.5f);
+                pt3=QVector3D(x-0.5f,altitudes[(l+1)*width+(w+0)],z+0.5f);
+                pt4=QVector3D(x+0.5f,altitudes[(l+1)*width+(w+1)],z+0.5f);
 
-                vertData.append(x-0.5f);vertData.append(altitudes[(l+1)*width+(w+0)]);vertData.append(z+0.5f);
-                vertData.append(x+0.5f);vertData.append(altitudes[(l+0)*width+(w+1)]);vertData.append(z-0.5f);
-                vertData.append(x+0.5f);vertData.append(altitudes[(l+1)*width+(w+1)]);vertData.append(z+0.5f);
+                nr1=QVector3D::normal(pt1-pt2,pt3-pt2);
+                nr2=QVector3D::normal(pt3-pt2,pt4-pt2);
 
+                vertData.append(pt1.x());vertData.append(pt1.y());vertData.append(pt1.z());
+                vertData.append(nr1.x());vertData.append(nr1.y());vertData.append(nr1.z());
+                vertData.append(pt2.x());vertData.append(pt2.y());vertData.append(pt2.z());
+                vertData.append(nr1.x());vertData.append(nr1.y());vertData.append(nr1.z());
+                vertData.append(pt3.x());vertData.append(pt3.y());vertData.append(pt3.z());
+                vertData.append(nr1.x());vertData.append(nr1.y());vertData.append(nr1.z());
+
+                vertData.append(pt2.x());vertData.append(pt2.y());vertData.append(pt2.z());
+                vertData.append(nr2.x());vertData.append(nr2.y());vertData.append(nr2.z());
+                vertData.append(pt3.x());vertData.append(pt3.y());vertData.append(pt3.z());
+                vertData.append(nr2.x());vertData.append(nr2.y());vertData.append(nr2.z());
+                vertData.append(pt4.x());vertData.append(pt4.y());vertData.append(pt4.z());
+                vertData.append(nr2.x());vertData.append(nr2.y());vertData.append(nr2.z());
             break;
             }
             x++;
@@ -89,11 +109,15 @@ void mytruc::makeGLObject(){
 void mytruc::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatrix){
     vbo.bind();
     shaderProgram.bind(); // active le shader program
+    QMatrix3x3 normal_mat = viewMatrix.normalMatrix();
 
     shaderProgram.setUniformValue("projectionMatrix", projectionMatrix);
     shaderProgram.setUniformValue("viewMatrix", viewMatrix);
-    shaderProgram.setAttributeBuffer("in_position", GL_FLOAT, 0, 3, 3 * sizeof(GLfloat));
-    shaderProgram.enableAttributeArray("in_position");
+    shaderProgram.setUniformValue("norMatrix", normal_mat);
+    shaderProgram.setAttributeBuffer("posAttr", GL_FLOAT, 0, 3, 6 * sizeof(GLfloat));
+    shaderProgram.setAttributeBuffer("norAttr", GL_FLOAT, 3 * sizeof(GLfloat), 3, 6 * sizeof(GLfloat));
+    shaderProgram.enableAttributeArray("posAttr");
+    shaderProgram.enableAttributeArray("norAttr");
 
     for(int i=0; i < static_cast<int>((width-1)*(height-1)) ;i++){
         modelMatrix.setToIdentity();
