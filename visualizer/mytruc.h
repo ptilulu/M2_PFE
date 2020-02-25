@@ -15,7 +15,7 @@ public:
     mytruc();
 
     void makeGLObject();
-    void display(QMatrix4x4 &projectionMatrix, QMatrix4x4 &viewMatrix);
+    void display(QMatrix4x4 &projectionMatrix, QMatrix4x4 &viewMatrix, QMatrix4x4 &lightMatrix);
     void setShaderProgram(char * pathAndName);
     void initializeGL();
     void setAltitudes(std::vector<float> altitudes, uint width, uint height);

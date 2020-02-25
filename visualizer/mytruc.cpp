@@ -106,10 +106,10 @@ void mytruc::makeGLObject(){
     vbo.allocate(vertData.constData(), vertData.count() * int(sizeof(GLfloat)));
 }
 
-void mytruc::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatrix){
+void mytruc::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatrix, QMatrix4x4 &lightMatrix){
     vbo.bind();
     shaderProgram.bind(); // active le shader program
-    QMatrix3x3 normal_mat = viewMatrix.normalMatrix();
+    QMatrix3x3 normal_mat = lightMatrix.normalMatrix();
 
     shaderProgram.setUniformValue("projectionMatrix", projectionMatrix);
     shaderProgram.setUniformValue("viewMatrix", viewMatrix);
@@ -192,7 +192,7 @@ void mytruc::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatrix){
         }
     }
 
-    shaderProgram.disableAttributeArray("in_position");
-    shaderProgram.disableAttributeArray("colAttr");
+    shaderProgram.disableAttributeArray("posAttr");
+    shaderProgram.disableAttributeArray("norAttr");
     shaderProgram.release();
 }

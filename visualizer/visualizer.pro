@@ -8,7 +8,6 @@ TARGET = visualizer
 TEMPLATE = app
 
 !win32{
-    LIBS += -lgdal
     LIBS += -lglut -lGLU -lGL
 }
 win32{

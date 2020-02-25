@@ -2,3 +2,4 @@ build-visualizer-Desktop_*
 *.o
 
 build-visualizer-Desktop-Debug/
+gdal/

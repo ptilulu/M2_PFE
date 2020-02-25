@@ -2,6 +2,8 @@
     <qresource prefix="/shaders">
         <file alias="skybox.fsh">shaders/skybox.fsh</file>
         <file alias="skybox.vsh">shaders/skybox.vsh</file>
+        <file alias="simpleColor.fsh">shaders/simpleColor.fsh</file>
+        <file alias="simpleColor.vsh">shaders/simpleColor.vsh</file>
         <file alias="simple.fsh">shaders/simple.fsh</file>
         <file alias="simple.vsh">shaders/simple.vsh</file>
     </qresource>
