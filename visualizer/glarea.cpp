@@ -273,7 +273,7 @@ void GLArea::keyPressEvent(QKeyEvent *ev)
             xPos=0.0f;  yPos=-6.0f; zPos=-980.0f;
         break;
         case Qt::Key_Backspace :
-            xRotLight=0.0f; yRotLight=0.0f; zRotLight=0.0f;
+            xRotLight=90.0f; yRotLight=0.0f; zRotLight=0.0f;
         break;
         case Qt::Key_Escape:
             qDebug() <<"m_x" << xPos
@@ -311,8 +311,8 @@ void GLArea::mouseMoveEvent(QMouseEvent *ev)
         zPos += dy;
         update();
     }else if (ev->buttons() & Qt::LeftButton && ev->buttons() & Qt::RightButton){
-        xRotLight += dy;
-        yRotLight += dx;
+        xRotLight += -dy/4.0f;
+        zRotLight += dx/4.0f;
         update();
     }else if (ev->buttons() & Qt::LeftButton) {
         xRot += dy;
