@@ -4,6 +4,7 @@ DEM::DEM(QString fileName)
 {
     QFileInfo fileInfo(fileName);
     if(fileInfo.suffix() == "tif") fromGeotif(fileName);
+    else if(fileInfo.suffix() == "asc" ) parseASCII(fileName);
     else if(fileInfo.suffix() == "jpg" || fileInfo.suffix() == "jpeg") fromJpeg(fileName);
     this->initializeColorMap();
 }
@@ -26,6 +27,61 @@ void DEM::initializeColorMap()
     color_map.push_back(std::make_pair(4500, QColor(186, 109, 170)));
     color_map.push_back(std::make_pair(6000, QColor(215, 162, 214)));
     color_map.push_back(std::make_pair(7500, QColor(230, 200, 230)));
+}
+
+ void  DEM::parseASCII(QString fileName){
+  QFile file(fileName);
+  if (!file.open(QFile::ReadOnly)) {
+       qDebug("Could not open file");
+       return;
+   } else {
+       qDebug() << file.fileName() << " opened";
+   }
+
+   QTextStream stream(&file);
+   QString line;
+
+   std::vector<std::vector<int>> elevation_map;
+   int width = 0, height = 0;
+
+   bool firstIteration = true;
+
+   while(!stream.atEnd()){
+         line = stream.readLine();
+
+         // ignore useless lines
+         if(line.startsWith("ncols") || line.startsWith("nrows")
+         || line.startsWith("xllcorner") || line.startsWith("yllcorner")
+         || line.startsWith("cellsize") || line.startsWith("NODATA_value")) continue;
+
+         ++height;
+         QStringList values = line.split(' ');
+
+         // remove potential empty lines
+         values.removeAll(QString(""));
+
+         if(width == 0) width = values.size();
+
+         std::vector<int> vec;
+         foreach(QString str, values) {
+           vec.push_back(str.toInt());
+         }
+         elevation_map.push_back(vec);
+      }
+      file.close();
+
+      std::vector<float> data(width * height, 0.0f);
+      this->elevation_map = data;
+      this->width = width;
+      this->height = height;
+
+      for(unsigned int i = 0; i < this->width; i++){
+           for(unsigned int j = 0; j < this->height; j++){
+               this->elevation_map[i + j * this->width] = elevation_map[i][j]/10;
+           }
+      }
+
+      qDebug() << "Image:" << width << "x" << height;
 }
 
 void DEM::fromGeotif(QString fileName)
@@ -67,7 +123,6 @@ void DEM::fromGeotif(QString fileName)
                 elevation_map[i + j * this->width] = -.1;
         }
     }
-
 }
 void DEM::fromJpeg(QString fileName)
 {

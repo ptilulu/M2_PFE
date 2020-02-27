@@ -12,7 +12,7 @@ def test_images(model, path):
             img = image.load_img(os.path.join(path, file))
             img = image.img_to_array(img)
             img = np.expand_dims(img, axis=0)
-            result = model.predict_classes(img, batch_size=10)
+            result = model.predict(img, batch_size=10)
             print("---------------- Fichier: " + file + " ----------------")
             print(result[0][0])
 
@@ -38,5 +38,5 @@ model.compile(
 print("--------------------- TERRAINS ---------------------")
 test_images(model, 'data/test/terrains/')
 
-print("--------------------- NOT A TERRAIN ---------------------")
-test_images(model, 'data/test/not_terrains/')
+print("--------------------- OTHERS ---------------------")
+test_images(model, 'data/test/others/')

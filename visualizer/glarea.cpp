@@ -275,6 +275,9 @@ void GLArea::keyPressEvent(QKeyEvent *ev)
         case Qt::Key_Backspace :
             xRotLight=90.0f; yRotLight=0.0f; zRotLight=0.0f;
         break;
+        case Qt::Key_Space :
+            xRotLight=xRot; yRotLight=yRot; zRotLight=zRot;
+        break;
         case Qt::Key_Escape:
             qDebug() <<"m_x" << xPos
                      <<"m_y" << yPos

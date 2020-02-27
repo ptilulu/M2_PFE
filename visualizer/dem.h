@@ -17,6 +17,7 @@ public:
     void fromGeotif(QString fileName);
     void fromAscii();
     void fromJpeg(QString fileName);
+    void parseASCII(QString fileName);
 
     float getElevationAt(int x, int y);
     QColor getColorFromElevation(float elevation);

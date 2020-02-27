@@ -16,7 +16,7 @@ Princ::Princ(QWidget *parent) : QMainWindow(parent)
 void Princ::on_actionOuvrir_triggered()
 {
     Ui_Princ::statusBar->showMessage("Sélection de l'image tif");
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Ouvrir l'image de terrain..."), "C://", tr("GeoTIFF (*.tif);;JPEG (*.jpg *.jpeg)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Ouvrir l'image de terrain..."), "C://", tr("ASCII (*.asc);;GeoTIFF (*.tif);;JPEG (*.jpg *.jpeg)"));
     if(fileName.isEmpty()) return;
     dem = new DEM(fileName);
     this->glarea->setDem(dem);

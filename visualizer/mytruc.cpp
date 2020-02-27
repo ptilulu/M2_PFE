@@ -28,77 +28,105 @@ void mytruc::initializeGL(){
     setShaderProgram(":/shaders/simple");
 }
 
-
 void mytruc::makeGLObject(){
-    float altitude5,x=-(width/2.0f) + 1,z=-(height/2.0f) + 1;
-    QVector3D color1(1,0,0),color2(0,1,0),color3(0,0,1),color4(0.2f,0,1),color5(0,0,0);
-    QVector3D pt1,pt2,pt3,pt4,pt5;
-    QVector3D nr1,nr2;
+    if(width <2 || height < 2){
+        return;
+    }
+    float x=-(width/2.0f) + 0.5f,z=-(height/2.0f) + 0.5f;
     QVector<GLfloat> vertData;
-    for(uint l=0;l<height-1;l++){
-        for(uint w=0;w<width-1;w++){
-            switch (type) {
-            case 1:
-                pt1=QVector3D(x-0.5f,altitudes[(l+0)*width+(w+0)],z-0.5f);
-                pt2=QVector3D(x+0.5f,altitudes[(l+0)*width+(w+1)],z-0.5f);
-                pt3=QVector3D(x-0.5f,altitudes[(l+1)*width+(w+0)],z+0.5f);
-                pt4=QVector3D(x+0.5f,altitudes[(l+1)*width+(w+1)],z+0.5f);
-                altitude5=(altitudes[l*width+w]+altitudes[l*width+(w+1)]+altitudes[(l+1)*width+w]+altitudes[(l+1)*width+(w+1)])/4;
-                pt5=QVector3D(x,altitude5,z);
-
-                vertData.append(x-0.5f);vertData.append(altitudes[(l+0)*width+(w+0)]);vertData.append(z-0.5f);
-                vertData.append(x+0.5f);vertData.append(altitudes[(l+0)*width+(w+1)]);vertData.append(z-0.5f);
-                vertData.append(x);vertData.append(altitude5);vertData.append(z);
-
-                vertData.append(x+0.5f);vertData.append(altitudes[(l+0)*width+(w+1)]);vertData.append(z-0.5f);
-                vertData.append(x+0.5f);vertData.append(altitudes[(l+1)*width+(w+1)]);vertData.append(z+0.5f);
-                vertData.append(x);vertData.append(altitude5);vertData.append(z);
-
-                vertData.append(x+0.5f);vertData.append(altitudes[(l+1)*width+(w+1)]);vertData.append(z+0.5f);
-                vertData.append(x-0.5f);vertData.append(altitudes[(l+1)*width+(w+0)]);vertData.append(z+0.5f);
-                vertData.append(x);vertData.append(altitude5);vertData.append(z);
-
-                vertData.append(x-0.5f);vertData.append(altitudes[(l+1)*width+(w+0)]);vertData.append(z+0.5f);
-                vertData.append(x-0.5f);vertData.append(altitudes[(l+0)*width+(w+0)]);vertData.append(z-0.5f);
-                vertData.append(x);vertData.append(altitude5);vertData.append(z);
-
-                vertData.append(x-0.5f);vertData.append(altitudes[(l+0)*width+(w+0)]);vertData.append(z-0.5f);
-                vertData.append(x+0.5f);vertData.append(altitudes[(l+0)*width+(w+1)]);vertData.append(z-0.5f);
-                vertData.append(x+0.5f);vertData.append(altitudes[(l+1)*width+(w+1)]);vertData.append(z+0.5f);
-                vertData.append(x-0.5f);vertData.append(altitudes[(l+1)*width+(w+0)]);vertData.append(z+0.5f);
-                vertData.append(x-0.5f);vertData.append(altitudes[(l+0)*width+(w+0)]);vertData.append(z-0.5f);
-                vertData.append(x+0.5f);vertData.append(altitudes[(l+1)*width+(w+1)]);vertData.append(z+0.5f);
-                vertData.append(x+0.5f);vertData.append(altitudes[(l+0)*width+(w+1)]);vertData.append(z-0.5f);
-                vertData.append(x-0.5f);vertData.append(altitudes[(l+1)*width+(w+0)]);vertData.append(z+0.5f);
-            break;
-            case 2:
-                pt1=QVector3D(x-0.5f,altitudes[(l+0)*width+(w+0)],z-0.5f);
-                pt2=QVector3D(x+0.5f,altitudes[(l+0)*width+(w+1)],z-0.5f);
-                pt3=QVector3D(x-0.5f,altitudes[(l+1)*width+(w+0)],z+0.5f);
-                pt4=QVector3D(x+0.5f,altitudes[(l+1)*width+(w+1)],z+0.5f);
-
-                nr1=QVector3D::normal(pt1-pt2,pt3-pt2);
-                nr2=QVector3D::normal(pt3-pt2,pt4-pt2);
-
-                vertData.append(pt1.x());vertData.append(pt1.y());vertData.append(pt1.z());
-                vertData.append(nr1.x());vertData.append(nr1.y());vertData.append(nr1.z());
-                vertData.append(pt2.x());vertData.append(pt2.y());vertData.append(pt2.z());
-                vertData.append(nr1.x());vertData.append(nr1.y());vertData.append(nr1.z());
-                vertData.append(pt3.x());vertData.append(pt3.y());vertData.append(pt3.z());
-                vertData.append(nr1.x());vertData.append(nr1.y());vertData.append(nr1.z());
-
-                vertData.append(pt2.x());vertData.append(pt2.y());vertData.append(pt2.z());
-                vertData.append(nr2.x());vertData.append(nr2.y());vertData.append(nr2.z());
-                vertData.append(pt3.x());vertData.append(pt3.y());vertData.append(pt3.z());
-                vertData.append(nr2.x());vertData.append(nr2.y());vertData.append(nr2.z());
-                vertData.append(pt4.x());vertData.append(pt4.y());vertData.append(pt4.z());
-                vertData.append(nr2.x());vertData.append(nr2.y());vertData.append(nr2.z());
-            break;
-            }
+    std::vector<QVector3D> vertPos,vertNorm;
+    for(uint h=0;h<height;h++){
+        for(uint w=0;w<width;w++){
+            vertPos.push_back(QVector3D(x,altitudes[h*width+w],z));
             x++;
         }
-        x=-(width/2.0f) + 1;
+        x=-(width/2.0f) + 0.5f;
         z++;
+    }
+
+    QVector3D pt1,pt2,pt3,pt4,pt5,nor;
+    for(uint h=0;h<height;h++){
+        for(uint w=0;w<width;w++){
+            if(w==0){       pt1=vertPos[h*width+w];}else{pt1=vertPos[h*width+(w-1)];}
+            if(h==0){       pt2=vertPos[h*width+w];}else{pt2=vertPos[(h-1)*width+w];}
+            if(w==width -1){pt3=vertPos[h*width+w];}else{pt3=vertPos[h*width+(w+1)];}
+            if(h==height-1){pt4=vertPos[h*width+w];}else{pt4=vertPos[(h+1)*width+w];}
+            vertNorm.push_back(QVector3D::normal(pt4-pt2,pt3-pt1));
+        }
+    }
+    uint id;
+    if(type==1){
+        for(uint h=0;h<height-1;h++){
+            for(uint w=0;w<width-1;w++){
+                id=(h+0)*width+(w+0);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                id=(h+0)*width+(w+1);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                id=(h+1)*width+(w+0);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+
+                id=(h+0)*width+(w+1);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                id=(h+1)*width+(w+0);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                id=(h+1)*width+(w+1);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+            }
+        }
+    }
+    if(type==2){
+        for(uint h=0;h<height-1;h++){
+            for(uint w=0;w<width-1;w++){
+                pt1=vertPos[(h+0)*width+(w+0)];
+                pt2=vertPos[(h+0)*width+(w+1)];
+                pt3=vertPos[(h+1)*width+(w+0)];
+                pt4=vertPos[(h+1)*width+(w+1)];
+                pt5=(pt1+pt2+pt3+pt4)/4.0f;
+                nor=QVector3D::normal(pt3-pt2,pt4-pt1);
+
+                id=(h+0)*width+(w+0);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                id=(h+0)*width+(w+1);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                vertData.append(pt5.x());vertData.append(pt5.y());vertData.append(pt5.z());
+                vertData.append(nor.x());vertData.append(nor.y());vertData.append(nor.z());
+
+                id=(h+0)*width+(w+1);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                id=(h+1)*width+(w+1);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                vertData.append(pt5.x());vertData.append(pt5.y());vertData.append(pt5.z());
+                vertData.append(nor.x());vertData.append(nor.y());vertData.append(nor.z());
+
+                id=(h+1)*width+(w+1);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                id=(h+1)*width+(w+0);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                vertData.append(pt5.x());vertData.append(pt5.y());vertData.append(pt5.z());
+                vertData.append(nor.x());vertData.append(nor.y());vertData.append(nor.z());
+
+                id=(h+1)*width+(w+0);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                id=(h+0)*width+(w+0);
+                vertData.append(vertPos[id].x()) ;vertData.append(vertPos[id].y()) ;vertData.append(vertPos[id].z());
+                vertData.append(vertNorm[id].x());vertData.append(vertNorm[id].y());vertData.append(vertNorm[id].z());
+                vertData.append(pt5.x());vertData.append(pt5.y());vertData.append(pt5.z());
+                vertData.append(nor.x());vertData.append(nor.y());vertData.append(nor.z());
+            }
+        }
     }
 
     vbo.create();
@@ -127,46 +155,7 @@ void mytruc::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatrix, QMatri
         modelMatrix.rotate(rotation.z(),0,0,1);
         shaderProgram.setUniformValue("size",size);
         shaderProgram.setUniformValue("modelMatrix", modelMatrix);
-
-        switch (type) {
-        case 1:
-            switch (displayMode) {
-            case 0 :
-            //pas d'affichage
-            break;
-            case 1 :
-            //affichage avec des faces triangle/quad
-                for(int j=0;j<4;j++){
-                    glDrawArrays(GL_TRIANGLES, 20*i+j*3,3);
-                }
-            break;
-            case 2 :
-            //affichage en maille
-                glLineWidth(3);
-                for(int j=0;j<4;j++){
-                        glDrawArrays(GL_LINES, 20*i+j*3+0,2);
-                        glDrawArrays(GL_LINES, 20*i+j*3+1,2);
-                }
-            break;
-            case 3 :
-            //affichage en sommet
-                glPointSize(4);
-                glDrawArrays(GL_POINTS, 20*i, 3*4);
-            break;
-            case 4 :
-            //affichage avec des faces triangle/quad
-                for(int j=0;j<4;j++){
-                    glDrawArrays(GL_TRIANGLES, 20*i+j*3,3);
-                }
-                glLineWidth(3);
-                for(int j=0;j<7;j++){
-                    glDrawArrays(GL_LINES, 20*i+4*3+j,2);
-                }
-            break;
-            default:;
-            }
-        break;
-        case 2:
+        if(type==1){
             switch (displayMode) {
             case 0 :
             //pas d'affichage
@@ -188,7 +177,29 @@ void mytruc::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatrix, QMatri
             break;
             default:;
             }
-        break;
+        }
+        if(type==2){
+            switch (displayMode) {
+            case 0 :
+            //pas d'affichage
+            break;
+            case 1 :
+            //affichage avec des faces triangle/quad
+                glDrawArrays(GL_TRIANGLES, 12*i,12);
+            break;
+            case 2 :
+            //affichage en maille
+                glLineWidth(3);
+                glDrawArrays(GL_LINES, 12*i+0,12);
+                glDrawArrays(GL_LINES, 12*i+1,11);
+            break;
+            case 3 :
+            //affichage en sommet
+                glPointSize(4);
+                glDrawArrays(GL_POINTS, 12*i, 12);
+            break;
+            default:;
+            }
         }
     }
 

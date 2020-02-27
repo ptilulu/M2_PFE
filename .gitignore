@@ -1,5 +1,4 @@
-build-visualizer-Desktop_*
+build*
 *.o
 
-build-visualizer-Desktop-Debug/
 gdal/
