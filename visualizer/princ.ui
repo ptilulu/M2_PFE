@@ -49,8 +49,9 @@
      <string>Fichier</string>
     </property>
     <addaction name="actionOuvrir"/>
-    <addaction name="separator"/>
     <addaction name="exportOBJAction"/>
+    <addaction name="separator"/>
+    <addaction name="actionCommandes"/>
     <addaction name="separator"/>
     <addaction name="actionQuitter"/>
    </widget>
@@ -69,6 +70,11 @@
   <action name="exportOBJAction">
    <property name="text">
     <string>Exporter l'objet...</string>
+   </property>
+  </action>
+  <action name="actionCommandes">
+   <property name="text">
+    <string>Commandes</string>
    </property>
   </action>
  </widget>

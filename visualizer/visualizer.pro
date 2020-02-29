@@ -8,7 +8,7 @@ TARGET = visualizer
 TEMPLATE = app
 
 !win32{
-    LIBS += -lglut -lGLU -lGL
+    LIBS += -lglut -lGLU -lGL -lgdal
 }
 win32{
     LIBS += -lGLU32\
@@ -18,15 +18,18 @@ win32{
 SOURCES +=  main.cpp\
             princ.cpp\
             glarea.cpp\
-            mytruc.cpp\
-            dem.cpp
+            dem.cpp \
+    terraindisplayer.cpp \
+    commands.cpp
 
 HEADERS  += princ.h\
             glarea.h\
-            mytruc.h\
-            dem.h
+            dem.h \
+    terraindisplayer.h \
+    commands.h
 
-FORMS    += princ.ui
+FORMS    += princ.ui \
+    commands.ui
 
 RESOURCES += \
     visualizer.qrc
