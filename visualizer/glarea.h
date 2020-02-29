@@ -47,7 +47,7 @@ protected:
 private:
     float xRot=90.0f, yRot=0.0f, zRot=0.0f;
     float xRotLight=90.0f, yRotLight=0.0f, zRotLight=0.0f;
-    float xPos=0.0f,  yPos=-6.0f, zPos=-980.0f;
+    float xPos=0.0f,  yPos=0.0f, zPos=-1000.0f;
     float bgr=0.2f, bgg=0.4f, bgb=1.0f, bga=1.0f;   //background rgba
     float deltaAngle=90/64.0f, deltaZoom=1;                //delta for mouvement
     QTimer *timer = nullptr;

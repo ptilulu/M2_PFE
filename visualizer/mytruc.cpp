@@ -37,7 +37,7 @@ void mytruc::makeGLObject(){
     std::vector<QVector3D> vertPos,vertNorm;
     for(uint h=0;h<height;h++){
         for(uint w=0;w<width;w++){
-            vertPos.push_back(QVector3D(x,altitudes[h*width+w],z));
+            vertPos.push_back(QVector3D(x,altitudes[h*width+w]/90.0f,z));
             x++;
         }
         x=-(width/2.0f) + 0.5f;

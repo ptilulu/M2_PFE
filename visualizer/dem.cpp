@@ -77,7 +77,9 @@ void DEM::initializeColorMap()
 
       for(unsigned int i = 0; i < this->width; i++){
            for(unsigned int j = 0; j < this->height; j++){
-               this->elevation_map[i + j * this->width] = elevation_map[i][j]/10;
+               this->elevation_map[i * this->height + j] = elevation_map[i][j];
+               if(this->elevation_map[i * this->height + j] < 0)
+                   this->elevation_map[i * this->height + j] = -.1;
            }
       }
 
@@ -85,7 +87,7 @@ void DEM::initializeColorMap()
 }
 
 void DEM::fromGeotif(QString fileName)
-{
+{/*
     // Initialize GDAL
     GDALAllRegister();
 
@@ -122,7 +124,7 @@ void DEM::fromGeotif(QString fileName)
             if(elevation_map[i + j * this->width] < 0)
                 elevation_map[i + j * this->width] = -.1;
         }
-    }
+    }*/
 }
 void DEM::fromJpeg(QString fileName)
 {

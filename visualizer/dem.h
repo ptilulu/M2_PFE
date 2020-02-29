@@ -2,7 +2,7 @@
 #define DEM_H
 
 #include <QString>
-#include "gdal/gdal_priv.h"
+//#include "gdal/gdal_priv.h"
 #include <QDebug>
 #include <QColor>
 #include <QProgressBar>

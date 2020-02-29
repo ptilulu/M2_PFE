@@ -270,7 +270,7 @@ void GLArea::keyPressEvent(QKeyEvent *ev)
 
         case Qt::Key_Return :
             xRot=90.0f; yRot=0.0f; zRot=0.0f;
-            xPos=0.0f;  yPos=-6.0f; zPos=-980.0f;
+            xPos=0.0f;  yPos=0.0f; zPos=-1000.0f;
         break;
         case Qt::Key_Backspace :
             xRotLight=90.0f; yRotLight=0.0f; zRotLight=0.0f;
