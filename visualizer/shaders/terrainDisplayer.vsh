@@ -14,6 +14,6 @@ uniform float size;
 void main() {
     vec4 pos = vec4(vec3(posAttr) * size, 1.0);
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * pos;
-    height=posAttr.y;
+    height = posAttr.y;
     nor = norMatrix * norAttr;
 }

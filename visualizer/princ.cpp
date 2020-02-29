@@ -8,9 +8,11 @@ Princ::Princ(QWidget *parent) : QMainWindow(parent)
 {
     setupUi(this);
     this->setWindowTitle("Génération de terrains par DeepLearning");
+
     Ui_Princ::actionOuvrir->setIcon(QIcon(":/icons/open.png"));
     Ui_Princ::actionQuitter->setIcon(QIcon(":/icons/quit.png"));
     Ui_Princ::exportOBJAction->setIcon(QIcon(":/icons/obj.png"));
+    Ui_Princ::actionCommandes->setIcon(QIcon(":/icons/commands.png"));
 }
 
 void Princ::on_actionOuvrir_triggered()
@@ -33,7 +35,7 @@ void Princ::on_actionOuvrir_triggered()
         float x=-(width/2.0f) + 0.5f,z=-(height/2.0f) + 0.5f;
         for(uint l=0;l<height;l++){
             for(uint w=0;w<width;w++){
-                stream << "v " << x << " " << dem->elevation_map[l*width+w] << " " << z << endl ;
+                stream << "v " << x << " " << dem->getElevationMap()[l*width+w] << " " << z << endl ;
                 x++;
             }
             x=-(width/2.0f) + 0.5f;
@@ -78,7 +80,7 @@ void Princ::on_exportOBJAction_triggered()
         float x=-(width/2.0f) + 0.5f,z=-(height/2.0f) + 0.5f;
         for(uint l=0;l<height;l++){
             for(uint w=0;w<width;w++){
-                stream << "v " << x << " " << dem->elevation_map[l*width+w] << " " << z << endl ;
+                stream << "v " << x << " " << dem->getElevationMap()[l*width+w] << " " << z << endl ;
                 x++;
             }
             x=-(width/2.0f) + 0.5f;
@@ -96,3 +98,12 @@ void Princ::on_exportOBJAction_triggered()
     Ui_Princ::statusBar->showMessage("Exportation en .OBJ terminée!");
 }
 
+
+void Princ::on_actionCommandes_triggered()
+{
+    if(commands != nullptr) commands->show();
+    else {
+        commands = new Commands;
+        commands->show();
+    }
+}
