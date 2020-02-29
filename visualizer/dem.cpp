@@ -68,7 +68,7 @@ void DEM::fromGeotif(QString fileName)
             // Water
             if(elevation_map[i + j * this->width] < 0) elevation_map[i + j * this->width] = 0;
         }
-    }
+    }*/
 }
 
 /**
@@ -125,7 +125,7 @@ void DEM::fromAscii(QString fileName)
             if(elevation_map[i][j] < 0) elevation_map[i][j] = 0;
 
             // Set and scale
-            this->elevation_map[i + j * this->width] = elevation_map[i][j] / 10;
+            this->elevation_map[i * this->height + j] = elevation_map[i][j] / 90;
         }
     }
 }

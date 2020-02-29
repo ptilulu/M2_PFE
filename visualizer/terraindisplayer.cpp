@@ -33,12 +33,11 @@ void TerrainDisplayer::setShaderProgram(QString path){
  */
 void TerrainDisplayer::makeGLObject()
 {
-    if(this->width < 2 || this->height < 2) return;
-
     float x = -(width/2.0f) + 0.5f;
     float z = -(height/2.0f) + 0.5f;
 
     QVector<GLfloat> vertData;
+
     std::vector<QVector3D> vertPos;
     std::vector<QVector3D> vertNorm;
 
@@ -126,7 +125,7 @@ void TerrainDisplayer::makeGLObject()
                     vertData.append(vertNorm[ids[i]].x());
                     vertData.append(vertNorm[ids[i]].y());
                     vertData.append(vertNorm[ids[i]].z());
-                    if(i % 2 != 0){
+                    if(i % 2 == 1){
                         vertData.append(pt5.x());
                         vertData.append(pt5.y());
                         vertData.append(pt5.z());
@@ -181,10 +180,6 @@ void TerrainDisplayer::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatr
         {
             switch (displayMode)
             {
-                case NONE:
-                    //pas d'affichage
-                break;
-
                 case FACE:
                     //affichage avec des faces triangle/quad
                     glDrawArrays(GL_TRIANGLES, 6 * i, 6);
@@ -204,6 +199,9 @@ void TerrainDisplayer::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatr
                 break;
 
                 default:;
+                case NONE:
+                    //pas d'affichage
+                break;
             }
         }
 
@@ -211,10 +209,6 @@ void TerrainDisplayer::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatr
         {
             switch (displayMode)
             {
-                case NONE:
-                    //pas d'affichage
-                break;
-
                 case FACE:
                     //affichage avec des faces triangle/quad
                     glDrawArrays(GL_TRIANGLES, 12 * i, 12);
@@ -234,6 +228,9 @@ void TerrainDisplayer::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatr
                 break;
 
                 default:;
+                case NONE:
+                    //pas d'affichage
+                break;
             }
         }
     }
@@ -259,8 +256,3 @@ void TerrainDisplayer::setAltitudes(std::vector<float> altitudes, unsigned int w
 
     qDebug() << __FUNCTION__ << "done!";
 }
-
-
-
-
-

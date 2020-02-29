@@ -26,7 +26,8 @@ void Princ::on_actionOuvrir_triggered()
     QFileInfo fileInfo(fileName);
 
 
-    // Temp génération auto de obj/*
+    // Temp génération auto de obj
+    /*
     QFile objFile(fileInfo.baseName() + ".obj");
     if(objFile.open(QIODevice::ReadWrite)){
         QTextStream stream(&objFile);
@@ -81,7 +82,7 @@ void Princ::on_exportOBJAction_triggered()
         float x=-(width/2.0f) + 0.5f,z=-(height/2.0f) + 0.5f;
         for(uint l=0;l<height;l++){
             for(uint w=0;w<width;w++){
-                stream << "v " << x << " " << dem->elevation_map[l*width+w]/90.0f << " " << z << endl ;
+                stream << "v " << x << " " << dem->getElevationMap()[l*width+w]/90.0f << " " << z << endl ;
                 x++;
             }
             x=-(width/2.0f) + 0.5f;

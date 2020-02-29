@@ -47,8 +47,6 @@ void GLArea::initializeGL()
         qWarning("Failed to compile and link shader program:");
         qWarning() << this->shaderProgram.log();
     }
-
-    this->makeGLObjects();
 }
 
 /**
@@ -88,50 +86,51 @@ void GLArea::paintGL()
 {
     this->glClearColor(this->skyBackground[0], this->skyBackground[1], this->skyBackground[2], this->skyBackground[3]);
     this->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    if(this->dem != nullptr) {
+        // Matrice de projection
+        QMatrix4x4 projectionMatrix;
+        projectionMatrix.perspective(45.0f, this->windowRatio, 1.0f, 10000.0f);
 
-    // Matrice de projection
-    QMatrix4x4 projectionMatrix;
-    projectionMatrix.perspective(45.0f, this->windowRatio, 1.0f, 10000.0f);
+        // Matrice de vue (caméra)
+        QMatrix4x4 viewMatrix;
+        viewMatrix.translate(this->xPos, this->yPos, this->zPos);
+        viewMatrix.rotate(this->xRot, 1, 0, 0);
+        viewMatrix.rotate(this->yRot, 0, 1, 0);
+        viewMatrix.rotate(this->zRot, 0, 0, 1);
 
-    // Matrice de vue (caméra)
-    QMatrix4x4 viewMatrix;
-    viewMatrix.translate(this->xPos, this->yPos, this->zPos);
-    viewMatrix.rotate(this->xRot, 1, 0, 0);
-    viewMatrix.rotate(this->yRot, 0, 1, 0);
-    viewMatrix.rotate(this->zRot, 0, 0, 1);
+        QMatrix4x4 lightMatrix;
+        lightMatrix.rotate(this->xRotLight, 1, 0, 0);
+        lightMatrix.rotate(this->yRotLight, 0, 1, 0);
+        lightMatrix.rotate(this->zRotLight, 0, 0, 1);
 
-    QMatrix4x4 lightMatrix;
-    lightMatrix.rotate(this->xRotLight, 1, 0, 0);
-    lightMatrix.rotate(this->yRotLight, 0, 1, 0);
-    lightMatrix.rotate(this->zRotLight, 0, 0, 1);
+        this->terrainDisplayer.display(projectionMatrix, viewMatrix, lightMatrix);
 
-    this->terrainDisplayer.display(projectionMatrix, viewMatrix, lightMatrix);
+        QMatrix4x4 modelMatrix;
+        modelMatrix.rotate(this->zRotLight, 0, 0, -1);
+        modelMatrix.rotate(this->yRotLight, 0, -1, 0);
+        modelMatrix.rotate(this->xRotLight, -1, 0, 0);
 
-    QMatrix4x4 modelMatrix;
-    modelMatrix.rotate(this->zRotLight, 0, 0, -1);
-    modelMatrix.rotate(this->yRotLight, 0, -1, 0);
-    modelMatrix.rotate(this->xRotLight, -1, 0, 0);
+        this->vbo.bind();
+        this->shaderProgram.bind();
 
-    this->vbo.bind();
-    this->shaderProgram.bind();
+        this->shaderProgram.setUniformValue("projectionMatrix", projectionMatrix);
+        this->shaderProgram.setUniformValue("viewMatrix", viewMatrix);
+        this->shaderProgram.setUniformValue("size", 1.0f);
+        this->shaderProgram.setUniformValue("modelMatrix", modelMatrix);
+        this->shaderProgram.setAttributeBuffer("in_position", GL_FLOAT, 0, 3, 6 * sizeof(GLfloat));
+        this->shaderProgram.setAttributeBuffer("colAttr", GL_FLOAT, 3 * sizeof(GLfloat), 3, 6 * sizeof(GLfloat));
+        this->shaderProgram.enableAttributeArray("in_position");
+        this->shaderProgram.enableAttributeArray("colAttr");
 
-    this->shaderProgram.setUniformValue("projectionMatrix", projectionMatrix);
-    this->shaderProgram.setUniformValue("viewMatrix", viewMatrix);
-    this->shaderProgram.setUniformValue("size", 1.0f);
-    this->shaderProgram.setUniformValue("modelMatrix", modelMatrix);
-    this->shaderProgram.setAttributeBuffer("in_position", GL_FLOAT, 0, 3, 6 * sizeof(GLfloat));
-    this->shaderProgram.setAttributeBuffer("colAttr", GL_FLOAT, 3 * sizeof(GLfloat), 3, 6 * sizeof(GLfloat));
-    this->shaderProgram.enableAttributeArray("in_position");
-    this->shaderProgram.enableAttributeArray("colAttr");
+        glPointSize(10);
+        this->glDrawArrays(GL_POINTS, 0, 1);
+        glLineWidth(1);
+        this->glDrawArrays(GL_LINES, 0, 2);
 
-    glPointSize(10);
-    this->glDrawArrays(GL_POINTS, 0, 1);
-    glLineWidth(1);
-    this->glDrawArrays(GL_LINES, 0, 2);
-
-    this->shaderProgram.disableAttributeArray("in_position");
-    this->shaderProgram.disableAttributeArray("colAttr");
-    this->shaderProgram.release();
+        this->shaderProgram.disableAttributeArray("in_position");
+        this->shaderProgram.disableAttributeArray("colAttr");
+        this->shaderProgram.release();
+    }
 }
 
 /**
