@@ -33,6 +33,8 @@ void TerrainDisplayer::setShaderProgram(QString path){
  */
 void TerrainDisplayer::makeGLObject()
 {
+    this->rotation=QVector3D(90, 0, 0);
+
     float x = -(width/2.0f) + 0.5f;
     float z = -(height/2.0f) + 0.5f;
 
@@ -45,7 +47,7 @@ void TerrainDisplayer::makeGLObject()
     {
         for(unsigned int w = 0; w < width; w++)
         {
-            vertPos.push_back(QVector3D(x, altitudes[h * width + w], z));
+            vertPos.push_back(QVector3D(x, altitudes[h * width + w] / 90.0f, z));
             x++;
         }
         x = -(width/2.0f) + 0.5f;
@@ -238,8 +240,6 @@ void TerrainDisplayer::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatr
     this->shaderProgram.disableAttributeArray("posAttr");
     this->shaderProgram.disableAttributeArray("norAttr");
     this->shaderProgram.release();
-
-    qDebug() << __FUNCTION__ << "done!";
 }
 
 /**

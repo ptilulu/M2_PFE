@@ -125,7 +125,7 @@ void DEM::fromAscii(QString fileName)
             if(elevation_map[i][j] < 0) elevation_map[i][j] = 0;
 
             // Set and scale
-            this->elevation_map[i * this->height + j] = elevation_map[i][j] / 90;
+            this->elevation_map[i * this->height + j] = elevation_map[i][j];
         }
     }
 }
@@ -156,7 +156,7 @@ void DEM::fromJpeg(QString fileName)
 
             // Check if it's grey shade
             if(color.red() == color.blue() && color.red() == color.green())
-                this->elevation_map[i + j * this->width] = color.red();
+                this->elevation_map[i + j * this->width] = color.red() * 10;
             else this->elevation_map[i + j * this->width] = 0;
         }
     }

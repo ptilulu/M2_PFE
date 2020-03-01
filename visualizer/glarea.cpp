@@ -93,15 +93,19 @@ void GLArea::paintGL()
 
         // Matrice de vue (caméra)
         QMatrix4x4 viewMatrix;
-        viewMatrix.translate(this->xPos, this->yPos, this->zPos);
+
+
+        viewMatrix.translate(0, 0, this->zPos-std::max(this->dem->getWidth(), this->dem->getHeight()));
         viewMatrix.rotate(this->xRot, 1, 0, 0);
         viewMatrix.rotate(this->yRot, 0, 1, 0);
         viewMatrix.rotate(this->zRot, 0, 0, 1);
+        viewMatrix.translate(this->xPos, this->yPos, 0);
 
         QMatrix4x4 lightMatrix;
         lightMatrix.rotate(this->xRotLight, 1, 0, 0);
         lightMatrix.rotate(this->yRotLight, 0, 1, 0);
         lightMatrix.rotate(this->zRotLight, 0, 0, 1);
+        lightMatrix.rotate(90, 1, 0, 0);
 
         this->terrainDisplayer.display(projectionMatrix, viewMatrix, lightMatrix);
 
@@ -219,16 +223,16 @@ void GLArea::keyPressEvent(QKeyEvent *ev)
         break;
 
         case Qt::Key_Return :
-            this->xRot = 90.0f;
+            this->xRot = 0.0f;
             this->yRot = 0.0f;
             this->zRot = 0.0f;
             this->xPos = 0.0f;
             this->yPos = 0.0f;
-            this->zPos = -1000.0f;
+            this->zPos = 0.0f;
         break;
 
         case Qt::Key_Backspace :
-            this->xRotLight = 90.0f;
+            this->xRotLight = 0.0f;
             this->yRotLight = 0.0f;
             this->zRotLight = 0.0f;
         break;
@@ -280,16 +284,20 @@ void GLArea::mouseMoveEvent(QMouseEvent *ev)
         this->zPos += dy;
         this->update();
     } else if (ev->buttons() & Qt::LeftButton && ev->buttons() & Qt::RightButton){
-        this->xRotLight += -dy / 4.0f;
-        this->zRotLight += dx / 4.0f;
+        this->xRotLight -= dy / 3.6f;
+        this->zRotLight += dx / 3.6f;
         this->update();
     } else if (ev->buttons() & Qt::LeftButton) {
-        this->xRot += dy;
-        this->yRot += dx;
+        this->xRot += dy / 3.6f;
+        this->yRot += dx / 3.6f;
         this->update();
     } else if (ev->buttons() & Qt::RightButton) {
         this->xPos += dx / 10.0f;
         this->yPos -= dy / 10.0f;
+        this->update();
+    } else if (ev->buttons() & Qt::BackButton) {
+        this->zRot += dx / 3.6f;
+        this->zRot += dy / 3.6f;
         this->update();
     }
 

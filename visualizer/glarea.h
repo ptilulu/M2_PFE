@@ -92,7 +92,7 @@ class GLArea : public QOpenGLWidget, protected QOpenGLFunctions
         /**
          * @brief xRot Rotation sur l'axe x du terrain
          */
-        float xRot = 90.0f;
+        float xRot = 0.0f;
 
         /**
          * @brief yRot Rotation sur l'axe y du terrain
@@ -107,7 +107,7 @@ class GLArea : public QOpenGLWidget, protected QOpenGLFunctions
         /**
          * @brief xRotLight Rotation sur l'axe x de la lumière
          */
-        float xRotLight = 90.0f;
+        float xRotLight = 0.0f;
 
         /**
          * @brief yRotLight Rotation sur l'axe y de la lumière
@@ -127,12 +127,12 @@ class GLArea : public QOpenGLWidget, protected QOpenGLFunctions
         /**
          * @brief yPos Position sur l'axe y du terrain
          */
-        float yPos = -6.0f;
+        float yPos = 0.0f;
 
         /**
          * @brief zPos Position sur l'axe z du terrain
          */
-        float zPos = -980.0f;
+        float zPos = 0.0f;
 
         /**
          * @brief skyBackground[] Sky RGBA colors
