@@ -68,8 +68,9 @@ void TerrainDisplayer::makeGLObject()
         }
     }
 
-    if(type == QUAD_2_TRIANGES)
+    if(type == QUAD_2_TRIANGLES)
     {
+        qDebug() << "QUAD_2_TRIANGLES" ;
         for(unsigned int h = 0; h < height-1; h++)
         {
             for(unsigned int w = 0; w < width-1; w++){
@@ -97,6 +98,7 @@ void TerrainDisplayer::makeGLObject()
 
     if(type == QUAD_4_TRIANGLES)
     {
+        qDebug() << "QUAD_4_TRIANGLES" ;
         for(unsigned int h = 0; h < height-1; h++)
         {
             for(unsigned int w = 0; w < width-1; w++)
@@ -106,7 +108,8 @@ void TerrainDisplayer::makeGLObject()
                 pt3 = vertPos[(h+1) * width + (w+0)];
                 pt4 = vertPos[(h+1) * width + (w+1)];
                 pt5 = (pt1 + pt2 + pt3 + pt4) / 4.0f;
-                nor = QVector3D::normal(pt3 - pt2, pt4 - pt1);
+                //nor = QVector3D::normal(pt3 - pt2, pt4 - pt1);
+                nor = (vertNorm[(h+0) * width + (w+0)] + vertNorm[(h+0) * width + (w+1)] + vertNorm[(h+1) * width + (w+0)]+ vertNorm[(h+1) * width + (w+1)] )/4.0f;
 
 
                 std::vector<unsigned int> ids = {
@@ -167,8 +170,7 @@ void TerrainDisplayer::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatr
     this->shaderProgram.enableAttributeArray("posAttr");
     this->shaderProgram.enableAttributeArray("norAttr");
 
-    for(int i = 0; i < static_cast<int>((width-1) * (height-1)); i++)
-    {
+
         modelMatrix.setToIdentity();
         modelMatrix.translate(this->position);
         modelMatrix.rotate(this->rotation.x(), 1, 0, 0);
@@ -178,29 +180,28 @@ void TerrainDisplayer::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatr
         this->shaderProgram.setUniformValue("size", size);
         this->shaderProgram.setUniformValue("modelMatrix", modelMatrix);
 
-        if(type == QUAD_2_TRIANGES)
+        if(type == QUAD_2_TRIANGLES)
         {
             switch (displayMode)
             {
                 case FACE:
                     //affichage avec des faces triangle/quad
-                    glDrawArrays(GL_TRIANGLES, 6 * i, 6);
+                    glDrawArrays(GL_TRIANGLES, 0, 6 * static_cast<int>((width-1) * (height-1)));
                 break;
 
                 case MAILLE:
                     //affichage en maille
                     glLineWidth(3);
-                    glDrawArrays(GL_LINES, 6 * i + 0, 6);
-                    glDrawArrays(GL_LINES, 6 * i + 1, 4);
+                    glDrawArrays(GL_LINES, 0, 6 * static_cast<int>((width-1) * (height-1)));
+                    glDrawArrays(GL_LINES, 1, 6 * static_cast<int>((width-1) * (height-1)) - 1);
                 break;
 
                 case SOMMET:
                     //affichage en sommet
                     glPointSize(4);
-                    glDrawArrays(GL_POINTS, 6 * i, 6);
+                    glDrawArrays(GL_POINTS, 0, 6 * static_cast<int>((width-1) * (height-1)));
                 break;
 
-                default:;
                 case NONE:
                     //pas d'affichage
                 break;
@@ -213,29 +214,27 @@ void TerrainDisplayer::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatr
             {
                 case FACE:
                     //affichage avec des faces triangle/quad
-                    glDrawArrays(GL_TRIANGLES, 12 * i, 12);
+                    glDrawArrays(GL_TRIANGLES, 0, 12 * static_cast<int>((width-1) * (height-1)));
                 break;
 
                 case MAILLE:
                     //affichage en maille
                     glLineWidth(3);
-                    glDrawArrays(GL_LINES, 12 * i + 0, 12);
-                    glDrawArrays(GL_LINES, 12 * i + 1, 11);
+                    glDrawArrays(GL_LINES, 0, 12 * static_cast<int>((width-1) * (height-1)));
+                    glDrawArrays(GL_LINES, 1, 12 * static_cast<int>((width-1) * (height-1)) - 1);
                 break;
 
                 case SOMMET:
                     //affichage en sommet
                     glPointSize(4);
-                    glDrawArrays(GL_POINTS, 12 * i, 12);
+                    glDrawArrays(GL_POINTS, 0, 12 * static_cast<int>((width-1) * (height-1)));
                 break;
 
-                default:;
                 case NONE:
                     //pas d'affichage
                 break;
             }
         }
-    }
 
     this->shaderProgram.disableAttributeArray("posAttr");
     this->shaderProgram.disableAttributeArray("norAttr");

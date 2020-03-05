@@ -16,7 +16,7 @@ class TerrainDisplayer
         /**
          * @brief Affichage
          */
-        enum Type { QUAD_2_TRIANGES, QUAD_4_TRIANGLES };
+        enum Type { QUAD_2_TRIANGLES, QUAD_4_TRIANGLES };
         enum DisplayMode { NONE, FACE, MAILLE, SOMMET };
 
         /**
