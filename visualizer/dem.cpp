@@ -32,7 +32,7 @@ DEM::DEM(QString fileName)
  * @param fileName
  */
 void DEM::fromGeotif(QString fileName)
-{/*
+{
     // Initialize GDAL
     GDALAllRegister();
 
@@ -62,13 +62,10 @@ void DEM::fromGeotif(QString fileName)
     {
         for(unsigned int j = 0; j < this->height; j++)
         {
-            // Scaling
-            elevation_map[i + j * this->width] /= 10;
-
             // Water
             if(elevation_map[i + j * this->width] < 0) elevation_map[i + j * this->width] = 0;
         }
-    }*/
+    }
 }
 
 /**

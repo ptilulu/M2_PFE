@@ -8,7 +8,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 
-//#include "gdal/gdal_priv.h"
+#include "gdal/gdal_priv.h"
 
 /**
  * @brief La classe DEM utilisée pour récupérer les données d'élévation depuis les différents fichiers d'entrée

@@ -1,3 +1,5 @@
+#version 130
+
 varying float height;
 varying vec3 nor;
 
