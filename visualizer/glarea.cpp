@@ -54,29 +54,44 @@ void GLArea::initializeGL()
  */
 void GLArea::makeGLObjects()
 {
-    this->terrainDisplayer.makeGLObject();
-
     QVector<GLfloat> vertData;
 
-    vertData.append(0.0);
-    vertData.append(0.0);
-    vertData.append(1000.0);
+    if(displayMode == TERRAIN){
 
-    vertData.append(255.0f/255);
-    vertData.append(255.0f/255);
-    vertData.append(0.0f/255);
+        this->terrainDisplayer.makeGLObject();
 
-    vertData.append(0.0);
-    vertData.append(0.0);
-    vertData.append(0.0);
+        vertData.append(0.0);
+        vertData.append(0.0);
+        vertData.append(1000.0);
 
-    vertData.append(255.0f/255);
-    vertData.append(255.0f/255);
-    vertData.append(0.0f/255);
+        vertData.append(255.0f/255);
+        vertData.append(255.0f/255);
+        vertData.append(0.0f/255);
 
-    this->vbo.create();
-    this->vbo.bind();
-    this->vbo.allocate(vertData.constData(), vertData.count() * int(sizeof(GLfloat)));
+        vertData.append(0.0);
+        vertData.append(0.0);
+        vertData.append(0.0);
+
+        vertData.append(255.0f/255);
+        vertData.append(255.0f/255);
+        vertData.append(0.0f/255);
+
+        this->vbo.create();
+        this->vbo.bind();
+        this->vbo.allocate(vertData.constData(), vertData.count() * int(sizeof(GLfloat)));
+
+    } else if(displayMode == VOXEL){
+
+        std::vector<std::vector<QVector3D>> pos(dem->getWidth(), std::vector<QVector3D>(dem->getHeight(), {0.0, 0.0, 0.0}));
+        for(int i = 0; i < dem->getWidth(); i++){
+            for(int j = 0; j < dem->getHeight(); j++){
+                pos[i][j] = {i / 10.0f, dem->getNormalizedElevationAt(i,j) / 10.0f, j / 10.0f};
+            }
+        }
+        voxels.push_back(new VoxelDisplayer(pos, 0.05, true));
+        for(int i = 0; i < voxels.size(); i++) voxels.at(i)->createGlObject();
+
+    }
 }
 
 /**
@@ -87,13 +102,13 @@ void GLArea::paintGL()
     this->glClearColor(this->skyBackground[0], this->skyBackground[1], this->skyBackground[2], this->skyBackground[3]);
     this->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if(this->dem != nullptr) {
+
         // Matrice de projection
         QMatrix4x4 projectionMatrix;
         projectionMatrix.perspective(45.0f, this->windowRatio, 1.0f, 10000.0f);
 
         // Matrice de vue (caméra)
         QMatrix4x4 viewMatrix;
-
 
         viewMatrix.translate(0, 0, this->zPos-std::max(this->dem->getWidth(), this->dem->getHeight()));
         viewMatrix.rotate(this->xRot, 1, 0, 0);
@@ -107,14 +122,14 @@ void GLArea::paintGL()
         lightMatrix.rotate(this->zRotLight, 0, 0, 1);
         lightMatrix.rotate(90, 1, 0, 0);
 
-        this->terrainDisplayer.display(projectionMatrix, viewMatrix, lightMatrix);
+        if(displayMode == TERRAIN) this->terrainDisplayer.display(projectionMatrix, viewMatrix, lightMatrix);
 
         QMatrix4x4 modelMatrix;
         modelMatrix.rotate(this->zRotLight, 0, 0, -1);
         modelMatrix.rotate(this->yRotLight, 0, -1, 0);
         modelMatrix.rotate(this->xRotLight, -1, 0, 0);
 
-        this->vbo.bind();
+        if(displayMode == TERRAIN) this->vbo.bind();
         this->shaderProgram.bind();
 
         this->shaderProgram.setUniformValue("projectionMatrix", projectionMatrix);
@@ -126,10 +141,18 @@ void GLArea::paintGL()
         this->shaderProgram.enableAttributeArray("in_position");
         this->shaderProgram.enableAttributeArray("colAttr");
 
-        glPointSize(10);
-        this->glDrawArrays(GL_POINTS, 0, 1);
-        glLineWidth(1);
-        this->glDrawArrays(GL_LINES, 0, 2);
+        if(displayMode == TERRAIN){
+
+            glPointSize(10);
+            this->glDrawArrays(GL_POINTS, 0, 1);
+            glLineWidth(1);
+            this->glDrawArrays(GL_LINES, 0, 2);
+
+        } else if(displayMode == VOXEL){
+
+            for(int i = 0; i < voxels.size(); i++) voxels.at(i)->display(shaderProgram);
+
+        }
 
         this->shaderProgram.disableAttributeArray("in_position");
         this->shaderProgram.disableAttributeArray("colAttr");
@@ -142,7 +165,8 @@ void GLArea::paintGL()
  */
 void GLArea::tearGLObjects()
 {
-    this->vbo.destroy();
+    if(displayMode == TERRAIN) this->vbo.destroy();
+    else if(displayMode == VOXEL) for(auto voxel : voxels) voxel->tearGLObjects();
 }
 
 /**
@@ -268,6 +292,24 @@ void GLArea::mousePressEvent(QMouseEvent *ev)
 void GLArea::wheelEvent(QWheelEvent *ev){
     this->zPos += static_cast<float>(ev->delta() * this->deltaZoom / 100);
     this->update();
+}
+
+/**
+ * @brief GLArea::getDisplayMode
+ * @return
+ */
+GLArea::DisplayMode GLArea::getDisplayMode() const
+{
+    return displayMode;
+}
+
+/**
+ * @brief GLArea::setDisplayMode
+ * @param value
+ */
+void GLArea::setDisplayMode(const GLArea::DisplayMode &value)
+{
+    displayMode = value;
 }
 
 /**

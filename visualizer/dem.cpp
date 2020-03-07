@@ -153,7 +153,7 @@ void DEM::fromJpeg(QString fileName)
 
             // Check if it's grey shade
             if(color.red() == color.blue() && color.red() == color.green())
-                this->elevation_map[i + j * this->width] = color.red() * 10;
+                this->elevation_map[i + j * this->width] = color.red();
             else this->elevation_map[i + j * this->width] = 0;
         }
     }
@@ -168,6 +168,17 @@ void DEM::fromJpeg(QString fileName)
 float DEM::getElevationAt(int x, int y)
 {
     return this->elevation_map[x + y * this->width];
+}
+
+/**
+ * @brief DEM::getNormalizedElevationAt
+ * @param x
+ * @param y
+ * @return
+ */
+float DEM::getNormalizedElevationAt(int x, int y)
+{
+    return 100 * elevation_map[x + y * this->width] / this->maxElevation;
 }
 
 /**
