@@ -51,9 +51,10 @@ class VoxelDisplayer
 
         /**
          * @brief display
-         * @param m_program
+         * @param projectionMatrix
+         * @param viewMatrix
          */
-        void display(QOpenGLShaderProgram &m_program);
+        void display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatrix);
 
         /**
          * @brief tearGLObjects
@@ -65,6 +66,11 @@ class VoxelDisplayer
          * @brief m_vbo
          */
         QOpenGLBuffer m_vbo;
+
+        /**
+         * @brief shaderProgram
+         */
+        QOpenGLShaderProgram shaderProgram;
 
         /**
          * @brief vertData

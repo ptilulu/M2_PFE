@@ -1,7 +1,6 @@
 #version 130
 
 varying float height;
-varying vec3 nor;
 
 void main() {
     vec4 col;
@@ -34,13 +33,8 @@ void main() {
     }else if(height > 0/90.0f){
         col=vec4( 65/255.0f, 194/255.0f,  60/255.0f, 1.0f);
     }else {
-        col=vec4( 12/255.0f,  35/255.0f, 255/255.0f, 1.0f);
+        col=vec4(  12/255.0f,   35/255.0f, 255/255.0f, 1.0f);
     }
 
-    vec3 light = normalize(vec3(0.0, 0.0, 10.0));
-    vec3 nor3 = normalize(nor);
-    float cosTheta = clamp( (dot(nor,light )), 0.3 , 1.0 );
-    vec3 lightColor = vec3 (1.0, 1.0, 1.0);
-
-    gl_FragColor = vec4(lightColor * cosTheta, 1.0f) * col;
+    gl_FragColor = col;
 }

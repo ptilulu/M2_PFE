@@ -239,6 +239,7 @@ void TerrainDisplayer::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatr
     this->shaderProgram.disableAttributeArray("posAttr");
     this->shaderProgram.disableAttributeArray("norAttr");
     this->shaderProgram.release();
+    this->vbo.release();
 }
 
 /**

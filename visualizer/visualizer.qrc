@@ -4,6 +4,8 @@
         <file alias="simpleColor.vsh">shaders/simpleColor.vsh</file>
         <file alias="terrainDisplayer.fsh">shaders/terrainDisplayer.fsh</file>
         <file alias="terrainDisplayer.vsh">shaders/terrainDisplayer.vsh</file>
+        <file alias="voxelDisplayer.fsh">shaders/voxelDisplayer.fsh</file>
+        <file alias="voxelDisplayer.vsh">shaders/voxelDisplayer.vsh</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="obj.png">icons/obj.png</file>

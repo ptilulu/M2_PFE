@@ -5,6 +5,13 @@ VoxelDisplayer::VoxelDisplayer(std::vector<std::vector<QVector3D>> pos, double h
     posInit = pos;
     hauteur = h;
     displayIt = isDisplay;
+
+    this->shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex, QString(":/shaders/voxelDisplayer.vsh"));
+    this->shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment, QString(":/shaders/voxelDisplayer.fsh"));
+    if(!this->shaderProgram.link()) {
+        qWarning("Failed to compile and link shader program:");
+        qWarning() << this->shaderProgram.log();
+    }
 }
 
 void VoxelDisplayer::setPositionPoint(QVector3D pos){
@@ -21,6 +28,7 @@ void VoxelDisplayer::createPoint(std::vector<GLfloat> &vertices, QVector3D coord
     for(int i = 0; i < 3 ; i++) vertices.push_back(coord[i]);
 }
 void VoxelDisplayer::createGlObject(){
+
 
     std::vector<GLfloat> vertices;
 
@@ -157,13 +165,24 @@ void VoxelDisplayer::createGlObject(){
 }
 
 
-void VoxelDisplayer::display(QOpenGLShaderProgram &m_program){
+void VoxelDisplayer::display(QMatrix4x4 &projectionMatrix,QMatrix4x4 &viewMatrix){
 
-    m_vbo.bind();
+    this->m_vbo.bind();
+    QMatrix4x4 modelMatrix;
+    this->shaderProgram.bind();
+    this->shaderProgram.setUniformValue("projectionMatrix", projectionMatrix);
+    this->shaderProgram.setUniformValue("viewMatrix", viewMatrix);
+    this->shaderProgram.setAttributeBuffer("posAttr", GL_FLOAT, 0, 3, 3 * sizeof(GLfloat));
+    this->shaderProgram.enableAttributeArray("posAttr");
+
+    this->shaderProgram.setUniformValue("modelMatrix", modelMatrix);
 
     if(displayIt) glDrawArrays(type, 0, nombreTotal);
 
-    m_vbo.release();
+    this->shaderProgram.disableAttributeArray("posAttr");
+    this->shaderProgram.disableAttributeArray("norAttr");
+    this->shaderProgram.release();
+    this->m_vbo.release();
 }
 
 

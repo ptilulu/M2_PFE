@@ -62,7 +62,7 @@ void GLArea::makeGLObjects()
 
         vertData.append(0.0);
         vertData.append(0.0);
-        vertData.append(1000.0);
+        vertData.append(std::max(dem->getHeight(),dem->getWidth()));
 
         vertData.append(255.0f/255);
         vertData.append(255.0f/255);
@@ -123,7 +123,10 @@ void GLArea::paintGL()
         lightMatrix.rotate(90, 1, 0, 0);
 
         if(displayMode == TERRAIN) this->terrainDisplayer.display(projectionMatrix, viewMatrix, lightMatrix);
-
+        else if(displayMode == VOXEL)
+        {
+            for(int i = 0; i < voxels.size(); i++) voxels.at(i)->display(projectionMatrix, viewMatrix);
+        }
         QMatrix4x4 modelMatrix;
         modelMatrix.rotate(this->zRotLight, 0, 0, -1);
         modelMatrix.rotate(this->yRotLight, 0, -1, 0);
@@ -142,18 +145,12 @@ void GLArea::paintGL()
         this->shaderProgram.enableAttributeArray("colAttr");
 
         if(displayMode == TERRAIN){
-
             glPointSize(10);
             this->glDrawArrays(GL_POINTS, 0, 1);
             glLineWidth(1);
             this->glDrawArrays(GL_LINES, 0, 2);
 
-        } else if(displayMode == VOXEL){
-
-            for(int i = 0; i < voxels.size(); i++) voxels.at(i)->display(shaderProgram);
-
         }
-
         this->shaderProgram.disableAttributeArray("in_position");
         this->shaderProgram.disableAttributeArray("colAttr");
         this->shaderProgram.release();
