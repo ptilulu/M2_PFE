@@ -15,6 +15,7 @@
 
 #include "dem.h"
 #include "terraindisplayer.h"
+#include "voxeldisplayer.h"
 
 /**
  * @brief La classe GLArea permettant l'affichage 3D de nos terrains
@@ -23,6 +24,9 @@ class GLArea : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
     public:
+
+        enum DisplayMode { TERRAIN, VOXEL };
+
         /**
          * @brief GLArea Constructeur
          * @param parent Parent de l'objet
@@ -46,7 +50,10 @@ class GLArea : public QOpenGLWidget, protected QOpenGLFunctions
          */
         void setDem(DEM *dem);
 
-    protected:
+        DisplayMode getDisplayMode() const;
+        void setDisplayMode(const DisplayMode &value);
+
+protected:
         /**
          * @brief initializeGL
          */
@@ -170,6 +177,11 @@ class GLArea : public QOpenGLWidget, protected QOpenGLFunctions
         TerrainDisplayer terrainDisplayer;
 
         /**
+         * @brief voxels
+         */
+        std::vector<VoxelDisplayer*> voxels;
+
+        /**
          * @brief vbo
          */
         QOpenGLBuffer vbo;
@@ -178,6 +190,11 @@ class GLArea : public QOpenGLWidget, protected QOpenGLFunctions
          * @brief shaderProgram
          */
         QOpenGLShaderProgram shaderProgram;
+
+        /**
+         * @brief displayMode
+         */
+        DisplayMode displayMode;
 
         /**
          * @brief makeGLObjects

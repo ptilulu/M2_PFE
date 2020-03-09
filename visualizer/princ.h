@@ -19,12 +19,12 @@ class Princ : public QMainWindow, private Ui::Princ
          */
         explicit Princ(QWidget *parent = nullptr);
 
-    private slots:
         /**
-         * @brief on_actionOuvrir_triggered Appellée lors du déclenchement de Fichier => Ouvrir
+         * @brief openFile
          */
-        void on_actionOuvrir_triggered();
+        void openFile();
 
+    private slots:
         /**
          * @brief on_actionQuitter_triggered Appellée lors du déclenchement de Fichier => Quitter
          */
@@ -36,6 +36,10 @@ class Princ : public QMainWindow, private Ui::Princ
         void on_exportOBJAction_triggered();
 
         void on_actionCommandes_triggered();
+
+        void on_actionVoxel_triggered();
+
+        void on_actionTerrain_triggered();
 
 private:
         /**

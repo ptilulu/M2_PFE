@@ -49,6 +49,14 @@ class DEM
         float getElevationAt(int x, int y);
 
         /**
+         * @brief getNormalizedElevationAt
+         * @param x
+         * @param y
+         * @return
+         */
+        float getNormalizedElevationAt(int x, int y);
+
+        /**
          * @brief getWidth Renvoie la largeur du DEM
          * @return Largeur du DEM
          */

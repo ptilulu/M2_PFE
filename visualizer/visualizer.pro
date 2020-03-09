@@ -20,13 +20,15 @@ SOURCES +=  main.cpp\
             glarea.cpp\
             dem.cpp \
     terraindisplayer.cpp \
-    commands.cpp
+    commands.cpp \
+    voxeldisplayer.cpp
 
 HEADERS  += princ.h\
             glarea.h\
             dem.h \
     terraindisplayer.h \
-    commands.h
+    commands.h \
+    voxeldisplayer.h
 
 FORMS    += princ.ui \
     commands.ui

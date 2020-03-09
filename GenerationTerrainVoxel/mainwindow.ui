@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Projet FIG</string>
+   <string>Terrain Voxel</string>
   </property>
   <property name="windowIcon">
    <iconset theme="SB">
-    <normaloff>../../../../Images/IMG_20190409_215731.jpg</normaloff>../../../../Images/IMG_20190409_215731.jpg</iconset>
+    <normaloff>../../../Images/IMG_20190409_215731.jpg</normaloff>../../../Images/IMG_20190409_215731.jpg</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">

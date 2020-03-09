@@ -9,50 +9,10 @@ Princ::Princ(QWidget *parent) : QMainWindow(parent)
     setupUi(this);
     this->setWindowTitle("Génération de terrains par DeepLearning");
 
-    Ui_Princ::actionOuvrir->setIcon(QIcon(":/icons/open.png"));
+    Ui_Princ::menuOuvrir->setIcon(QIcon(":/icons/open.png"));
     Ui_Princ::actionQuitter->setIcon(QIcon(":/icons/quit.png"));
     Ui_Princ::exportOBJAction->setIcon(QIcon(":/icons/obj.png"));
     Ui_Princ::actionCommandes->setIcon(QIcon(":/icons/commands.png"));
-}
-
-void Princ::on_actionOuvrir_triggered()
-{
-    Ui_Princ::statusBar->showMessage("Sélection de l'image tif");
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Ouvrir l'image de terrain..."), "C://", tr("ASCII (*.asc);;GeoTIFF (*.tif);;JPEG (*.jpg *.jpeg)"));
-    if(fileName.isEmpty()) return;
-    dem = new DEM(fileName);
-    this->glarea->setDem(dem);
-
-    QFileInfo fileInfo(fileName);
-
-
-    // Temp génération auto de obj
-    /*
-    QFile objFile(fileInfo.baseName() + ".obj");
-    if(objFile.open(QIODevice::ReadWrite)){
-        QTextStream stream(&objFile);
-
-        //export in obj
-        uint height = dem->getHeight(), width =dem->getWidth();
-        float x=-(width/2.0f) + 0.5f,z=-(height/2.0f) + 0.5f;
-        for(uint l=0;l<height;l++){
-            for(uint w=0;w<width;w++){
-                stream << "v " << x << " " << dem->getElevationMap()[l*width+w]/90.0f << " " << z << endl ;
-                x++;
-            }
-            x=-(width/2.0f) + 0.5f;
-            z++;
-        }
-        uint id=1;
-        for(uint l=0;l<height-1;l++){
-            for(uint w=0;w<width-1;w++){
-                stream << "f " << id << " " << id+1 << " " << id+width+1 << " " << id+width << endl ;
-                id++;
-            }
-            id++;
-        }
-    }*/
-    Ui_Princ::statusBar->showMessage("Fichier " + fileInfo.baseName() + " ouvert avec succès!");
 }
 
 void Princ::on_actionQuitter_triggered()
@@ -108,4 +68,26 @@ void Princ::on_actionCommandes_triggered()
         commands = new Commands;
         commands->show();
     }
+}
+
+void Princ::on_actionVoxel_triggered()
+{
+    this->glarea->setDisplayMode(GLArea::VOXEL);
+    this->openFile();
+}
+
+void Princ::on_actionTerrain_triggered()
+{
+    this->glarea->setDisplayMode(GLArea::TERRAIN);
+    this->openFile();
+}
+
+void Princ::openFile(){
+    Ui_Princ::statusBar->showMessage("Sélection de l'image...");
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Ouvrir l'image de terrain..."), "C://", tr("ASCII (*.asc);;GeoTIFF (*.tif);;JPEG (*.jpg *.jpeg)"));
+    if(fileName.isEmpty()) return;
+    dem = new DEM(fileName);
+    this->glarea->setDem(dem);
+    QFileInfo fileInfo(fileName);
+    Ui_Princ::statusBar->showMessage("Fichier " + fileInfo.baseName() + " ouvert avec succès!");
 }
