@@ -89,7 +89,7 @@ void GLArea::paintGL()
     if(this->dem != nullptr) {
         // Matrice de projection
         QMatrix4x4 projectionMatrix;
-        projectionMatrix.perspective(45.0f, this->windowRatio, 1.0f, 10000.0f);
+        projectionMatrix.perspective(45.0f, this->windowRatio, 1.0f, 1000000.0f);
 
         // Matrice de vue (caméra)
         QMatrix4x4 viewMatrix;
@@ -285,7 +285,7 @@ void GLArea::mouseMoveEvent(QMouseEvent *ev)
         this->update();
     } else if (ev->buttons() & Qt::LeftButton && ev->buttons() & Qt::RightButton){
         this->xRotLight -= dy / 3.6f;
-        this->zRotLight += dx / 3.6f;
+        this->yRotLight -= dx / 3.6f;
         this->update();
     } else if (ev->buttons() & Qt::LeftButton) {
         this->xRot += dy / 3.6f;
