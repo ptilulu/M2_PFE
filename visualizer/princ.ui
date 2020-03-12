@@ -48,19 +48,22 @@
     <property name="title">
      <string>Fichier</string>
     </property>
-    <addaction name="actionOuvrir"/>
-    <addaction name="separator"/>
+    <widget class="QMenu" name="menuOuvrir">
+     <property name="title">
+      <string>Ouvrir...</string>
+     </property>
+     <addaction name="actionTerrain"/>
+     <addaction name="actionVoxel"/>
+    </widget>
+    <addaction name="menuOuvrir"/>
     <addaction name="exportOBJAction"/>
+    <addaction name="separator"/>
+    <addaction name="actionCommandes"/>
     <addaction name="separator"/>
     <addaction name="actionQuitter"/>
    </widget>
    <addaction name="menuFichier"/>
   </widget>
-  <action name="actionOuvrir">
-   <property name="text">
-    <string>Ouvrir...</string>
-   </property>
-  </action>
   <action name="actionQuitter">
    <property name="text">
     <string>Quitter</string>
@@ -69,6 +72,21 @@
   <action name="exportOBJAction">
    <property name="text">
     <string>Exporter l'objet...</string>
+   </property>
+  </action>
+  <action name="actionCommandes">
+   <property name="text">
+    <string>Commandes</string>
+   </property>
+  </action>
+  <action name="actionTerrain">
+   <property name="text">
+    <string>en tant que terrain</string>
+   </property>
+  </action>
+  <action name="actionVoxel">
+   <property name="text">
+    <string>en tant que voxels</string>
    </property>
   </action>
  </widget>

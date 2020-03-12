@@ -1,16 +1,30 @@
 <RCC>
     <qresource prefix="/shaders">
-        <file alias="skybox.fsh">shaders/skybox.fsh</file>
-        <file alias="skybox.vsh">shaders/skybox.vsh</file>
-        <file alias="simple.fsh">shaders/simple.fsh</file>
-        <file alias="simple.vsh">shaders/simple.vsh</file>
-    </qresource>
-    <qresource prefix="/textures">
-        <file alias="skybox.png">textures/skybox.png</file>
+        <file alias="simpleColor.fsh">shaders/simpleColor.fsh</file>
+        <file alias="simpleColor.vsh">shaders/simpleColor.vsh</file>
+        <file alias="terrainDisplayer.fsh">shaders/terrainDisplayer.fsh</file>
+        <file alias="terrainDisplayer.vsh">shaders/terrainDisplayer.vsh</file>
+        <file alias="voxelDisplayer.fsh">shaders/voxelDisplayer.fsh</file>
+        <file alias="voxelDisplayer.vsh">shaders/voxelDisplayer.vsh</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="obj.png">icons/obj.png</file>
         <file alias="open.png">icons/open.png</file>
         <file alias="quit.png">icons/quit.png</file>
+        <file alias="commands.png">icons/commands.png</file>
+        <file alias="4-icon.png">icons/4-icon.png</file>
+        <file alias="5-icon.png">icons/5-icon.png</file>
+        <file alias="6-icon.png">icons/6-icon.png</file>
+        <file alias="7-icon.png">icons/7-icon.png</file>
+        <file alias="8-icon.png">icons/8-icon.png</file>
+        <file alias="9-icon.png">icons/9-icon.png</file>
+        <file alias="A-icon.png">icons/A-icon.png</file>
+        <file alias="D-icon.png">icons/D-icon.png</file>
+        <file alias="E-icon.png">icons/E-icon.png</file>
+        <file alias="Q-icon.png">icons/Q-icon.png</file>
+        <file alias="S-icon.png">icons/S-icon.png</file>
+        <file alias="Z-icon.png">icons/Z-icon.png</file>
+        <file alias="minus-icon.png">icons/minus-icon.png</file>
+        <file alias="plus-icon.png">icons/plus-icon.png</file>
     </qresource>
 </RCC>

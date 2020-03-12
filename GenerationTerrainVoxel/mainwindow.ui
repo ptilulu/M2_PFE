@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1107</width>
+    <height>601</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Terrain Voxel</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="SB">
+    <normaloff>../../../Images/IMG_20190409_215731.jpg</normaloff>../../../Images/IMG_20190409_215731.jpg</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="GLArea" name="glarea"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1107</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFichier">
+    <property name="title">
+     <string>Fichier</string>
+    </property>
+    <addaction name="actionOuvrir_une_image"/>
+   </widget>
+   <addaction name="menuFichier"/>
+  </widget>
+  <action name="actionAide">
+   <property name="text">
+    <string>Aide</string>
+   </property>
+  </action>
+  <action name="actionVersion_et_auteurs">
+   <property name="text">
+    <string>Version et auteurs</string>
+   </property>
+  </action>
+  <action name="actionOuvrir_une_image">
+   <property name="text">
+    <string>Ouvrir une image ...</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>GLArea</class>
+   <extends>QOpenGLWidget</extends>
+   <header>glarea.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

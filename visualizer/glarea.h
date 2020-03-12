@@ -1,6 +1,3 @@
-// Basé sur :
-// CC-BY Edouard.Thiel@univ-amu.fr - 22/01/2019
-
 #ifndef GLAREA_H
 #define GLAREA_H
 
@@ -15,58 +12,199 @@
 #include <QVector3D>
 
 #include <algorithm>
-#include "dem.h"
-#include "mytruc.h"
 
-class GLArea : public QOpenGLWidget,
-               protected QOpenGLFunctions
+#include "dem.h"
+#include "terraindisplayer.h"
+#include "voxeldisplayer.h"
+
+/**
+ * @brief La classe GLArea permettant l'affichage 3D de nos terrains
+ */
+class GLArea : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
+    public:
 
-public:
-    explicit GLArea(QWidget *parent = nullptr);
-    ~GLArea() override;
+        enum DisplayMode { TERRAIN, VOXEL };
 
-    DEM *getDem() const;
-    void setDem(DEM *value);
+        /**
+         * @brief GLArea Constructeur
+         * @param parent Parent de l'objet
+         */
+        explicit GLArea(QWidget *parent = nullptr);
 
-protected slots:
-    void onTimeout();
+        /**
+         * @brief ~GLArea Destructeur
+         */
+        ~GLArea() override;
+
+        /**
+         * @brief getDem Renvoie le DEM courant associé à l'objet
+         * @return Le DEM courant
+         */
+        DEM *getDem() const;
+
+        /**
+         * @brief setDem Modifie le DEM courant associé à l'objet
+         * @param dem Le nouveau DEM
+         */
+        void setDem(DEM *dem);
+
+        DisplayMode getDisplayMode() const;
+        void setDisplayMode(const DisplayMode &value);
 
 protected:
-    void initializeGL() override;
-    void doProjection();
-    void resizeGL(int w, int h) override;
-    void paintGL() override;
-    void keyPressEvent(QKeyEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void wheelEvent(QWheelEvent *event) override;
+        /**
+         * @brief initializeGL
+         */
+        void initializeGL() override;
 
+        /**
+         * @brief resizeGL
+         * @param w
+         * @param h
+         */
+        void resizeGL(int w, int h) override;
 
-private:
-    float xRot=90.0f, yRot=0.0f, zRot=0.0f;
-    float xPos=0.0f,  yPos=-6.0f, zPos=-980.0f;
-    float bgr=0.2f, bgg=0.4f, bgb=1.0f, bga=1.0f;   //background rgba
-    float deltaAngle=1, deltaZoom=1;                //delta for mouvement
-    QTimer *timer = nullptr;
-    QElapsedTimer elapsedTimer;
-    float dt = 0;
-    float windowRatio = 1.0f;
-    QPoint lastPos;
+        /**
+         * @brief paintGL
+         */
+        void paintGL() override;
 
-    DEM* dem = nullptr;
-    mytruc truc;
+        /**
+         * @brief keyPressEvent
+         * @param event
+         */
+        void keyPressEvent(QKeyEvent *event) override;
 
-    /*
-    QOpenGLShaderProgram *program_skybox;
-    QOpenGLBuffer vbo_skybox;
-    QVector3D skybox_boundaries = QVector3D(9000, 8000, 8000);
-    QOpenGLTexture texture_skybox;
-    */
+        /**
+         * @brief mousePressEvent
+         * @param event
+         */
+        void mousePressEvent(QMouseEvent *event) override;
 
-    void makeGLObjects();
-    void tearGLObjects();
+        /**
+         * @brief mouseMoveEvent
+         * @param event
+         */
+        void mouseMoveEvent(QMouseEvent *event) override;
+
+        /**
+         * @brief wheelEvent
+         * @param event
+         */
+        void wheelEvent(QWheelEvent *event) override;
+
+    private:
+        /**
+         * @brief xRot Rotation sur l'axe x du terrain
+         */
+        float xRot = 0.0f;
+
+        /**
+         * @brief yRot Rotation sur l'axe y du terrain
+         */
+        float yRot = 0.0f;
+
+        /**
+         * @brief zRot Rotation sur l'axe z du terrain
+         */
+        float zRot = 0.0f;
+
+        /**
+         * @brief xRotLight Rotation sur l'axe x de la lumière
+         */
+        float xRotLight = 0.0f;
+
+        /**
+         * @brief yRotLight Rotation sur l'axe y de la lumière
+         */
+        float yRotLight = 0.0f;
+
+        /**
+         * @brief zRotLight Rotation sur l'axe z de la lumière
+         */
+        float zRotLight = 0.0f;
+
+        /**
+         * @brief xPos Position sur l'axe x du terrain
+         */
+        float xPos = 0.0f;
+
+        /**
+         * @brief yPos Position sur l'axe y du terrain
+         */
+        float yPos = 0.0f;
+
+        /**
+         * @brief zPos Position sur l'axe z du terrain
+         */
+        float zPos = 0.0f;
+
+        /**
+         * @brief skyBackground[] Sky RGBA colors
+         */
+        float skyBackground[4] = { 0.2f, 0.4f, 1.0f, 1.0f };
+
+        /**
+         * @brief deltaAngle
+         */
+        float deltaAngle = 90 / 64.0f;
+
+        /**
+         * @brief deltaZoom delta for movement
+         */
+        float deltaZoom = 1;
+
+        /**
+         * @brief windowRatio
+         */
+        float windowRatio = 1.0f;
+
+        /**
+         * @brief lastPos
+         */
+        QPoint lastPos;
+
+        /**
+         * @brief dem
+         */
+        DEM* dem = nullptr;
+
+        /**
+         * @brief terrainDisplayer
+         */
+        TerrainDisplayer terrainDisplayer;
+
+        /**
+         * @brief voxels
+         */
+        std::vector<VoxelDisplayer*> voxels;
+
+        /**
+         * @brief vbo
+         */
+        QOpenGLBuffer vbo;
+
+        /**
+         * @brief shaderProgram
+         */
+        QOpenGLShaderProgram shaderProgram;
+
+        /**
+         * @brief displayMode
+         */
+        DisplayMode displayMode;
+
+        /**
+         * @brief makeGLObjects
+         */
+        void makeGLObjects();
+
+        /**
+         * @brief tearGLObjects
+         */
+        void tearGLObjects();
 };
 
 #endif // GLAREA_H
