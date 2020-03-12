@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="basic.vsh">Shaders/basic.vsh</file>
-        <file alias="basic.fsh">Shaders/basic.fsh</file>
-    </qresource>
-</RCC>
