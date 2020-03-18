@@ -62,7 +62,7 @@ void GLArea::makeGLObjects()
 
         vertData.append(0.0);
         vertData.append(0.0);
-        vertData.append(std::max(dem->getHeight(),dem->getWidth()));
+        vertData.append(2*std::max(dem->getHeight(),dem->getWidth()));
 
         vertData.append(255.0f/255);
         vertData.append(255.0f/255);
@@ -113,8 +113,8 @@ void GLArea::paintGL()
         viewMatrix.translate(0, 0, this->zPos-std::max(this->dem->getWidth(), this->dem->getHeight()));
         viewMatrix.rotate(this->xRot, 1, 0, 0);
         viewMatrix.rotate(this->yRot, 0, 1, 0);
-        viewMatrix.rotate(this->zRot, 0, 0, 1);
         viewMatrix.translate(this->xPos, this->yPos, 0);
+        viewMatrix.rotate(this->zRot, 0, 0, 1);
 
         QMatrix4x4 lightMatrix;
         lightMatrix.rotate(this->xRotLight, 1, 0, 0);
@@ -319,7 +319,6 @@ void GLArea::mouseMoveEvent(QMouseEvent *ev)
     int dy = ev->y() - this->lastPos.y();
 
     if (ev->buttons() & Qt::MidButton) {
-        this->xPos += dx / 10.0f;
         this->zPos += dy;
         this->update();
     } else if (ev->buttons() & Qt::LeftButton && ev->buttons() & Qt::RightButton){
