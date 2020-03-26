@@ -31,7 +31,7 @@ void main() {
         col=vec4(182/255.0f, 223/255.0f,  77/255.0f, 1.0f);
     }else if(height > 75/90.0f){
         col=vec4(124/255.0f, 208/255.0f,  68/255.0f, 1.0f);
-    }else if(height > 12.0f/90.0f){
+    }else if(height > 0.0f/90.0f){
         col=vec4( 65/255.0f, 194/255.0f,  60/255.0f, 1.0f);
     }else {
         col=vec4( 12/255.0f,  35/255.0f, 255/255.0f, 1.0f);
@@ -39,7 +39,7 @@ void main() {
 
     vec3 light = normalize(vec3(0.0, 0.0, 10.0));
     vec3 nor3 = normalize(nor);
-    float cosTheta = clamp( (dot(nor,light )), 0.3 , 1.0 );
+    float cosTheta = clamp( (dot(nor3,light )), 0.3 , 1.0 );
     vec3 lightColor = vec3 (1.0, 1.0, 1.0);
 
     gl_FragColor = vec4(lightColor * cosTheta, 1.0f) * col;

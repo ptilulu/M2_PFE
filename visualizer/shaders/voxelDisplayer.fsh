@@ -30,7 +30,7 @@ void main() {
         col=vec4(182/255.0f, 223/255.0f,  77/255.0f, 1.0f);
     }else if(height > 75/90.0f){
         col=vec4(124/255.0f, 208/255.0f,  68/255.0f, 1.0f);
-    }else if(height > 0/90.0f){
+    }else if(height > 5.0f/90.0f){
         col=vec4( 65/255.0f, 194/255.0f,  60/255.0f, 1.0f);
     }else {
         col=vec4(  12/255.0f,   35/255.0f, 255/255.0f, 1.0f);

@@ -42,7 +42,7 @@ void Princ::on_exportOBJAction_triggered()
         float x=-(width/2.0f) + 0.5f,z=-(height/2.0f) + 0.5f;
         for(uint l=0;l<height;l++){
             for(uint w=0;w<width;w++){
-                stream << "v " << x << " " << dem->getElevationMap()[l*width+w]/90.0f << " " << z << endl ;
+                stream << "v " << x*90 << " " << dem->getElevationAt(static_cast<int>(w),static_cast<int>(l)) << " " << z*90 << endl ;
                 x++;
             }
             x=-(width/2.0f) + 0.5f;

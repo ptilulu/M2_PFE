@@ -145,8 +145,6 @@ void GLArea::paintGL()
         this->shaderProgram.enableAttributeArray("colAttr");
 
         if(displayMode == TERRAIN){
-            glPointSize(10);
-            this->glDrawArrays(GL_POINTS, 0, 1);
             glLineWidth(1);
             this->glDrawArrays(GL_LINES, 0, 2);
 
